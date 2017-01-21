@@ -1,7 +1,7 @@
---- vim74/runtime/syntax/cpp.vim.qthl~	2013-08-18 11:16:00.525811936 +0200
-+++ vim74/runtime/syntax/cpp.vim	2013-08-18 11:17:34.158641365 +0200
-@@ -42,6 +42,24 @@ if !exists("cpp_no_cpp11")
-   syn match cppNumber		display "\<0b[01]\+\(u\=l\{0,2}\|ll\=u\)\>"
+--- vim-8.0.0208/runtime/syntax/cpp.vim.qthl~	2017-01-21 00:07:10.874723231 +0100
++++ vim-8.0.0208/runtime/syntax/cpp.vim	2017-01-21 00:09:15.804429277 +0100
+@@ -53,6 +53,25 @@ if !exists("cpp_no_cpp14")
+   syn case match
  endif
  
 +" Qt extensions
@@ -22,12 +22,13 @@
 +  hi def link qtBaseClass	Type
 +endif
 +
++
  " The minimum and maximum operators in GNU C++
  syn match cppMinMax "[<>]?"
  
---- vim74/src/misc1.c.qthl~	2013-08-18 11:16:00.528811899 +0200
-+++ vim74/src/misc1.c	2013-08-18 11:23:16.072366855 +0200
-@@ -5918,6 +5918,8 @@ cin_isterminated(s, incl_open, incl_comm
+--- vim-8.0.0208/src/misc1.c.qthl~	2017-01-20 21:51:53.000000000 +0100
++++ vim-8.0.0208/src/misc1.c	2017-01-21 00:07:10.876723258 +0100
+@@ -6075,6 +6075,8 @@ cin_isterminated(
      char_u	found_start = 0;
      unsigned	n_open = 0;
      int		is_else = FALSE;
@@ -36,7 +37,7 @@
  
      s = cin_skipcomment(s);
  
-@@ -5934,7 +5936,7 @@ cin_isterminated(s, incl_open, incl_comm
+@@ -6091,7 +6093,7 @@ cin_isterminated(
  	if (*s == '}' && n_open > 0)
  	    --n_open;
  	if ((!is_else || n_open == 0)
@@ -45,7 +46,7 @@
  		&& cin_nocode(s + 1))
  	    return *s;
  	else if (*s == '{')
-@@ -5944,6 +5946,13 @@ cin_isterminated(s, incl_open, incl_comm
+@@ -6101,6 +6103,13 @@ cin_isterminated(
  	    else
  		++n_open;
  	}
