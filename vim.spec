@@ -16,7 +16,7 @@
 %define longtitle	All-purpose text editor
 
 Name:		vim
-Version:	8.0.0341
+Version:	8.0.0964
 Release:	1
 Summary:	VIsual editor iMproved
 Url:		http://www.vim.org/
@@ -193,7 +193,7 @@ cp -a %{SOURCE12} runtime/colors
 %patch25 -p1 -b .p25~
 %patch27 -p0
 %patch28 -p1 -b .pomode~
-%patch30 -p1
+%patch30 -p1 -b .dhcpd~
 %patch33 -p1 -b .security~
 #patch35 -p1 -b .localedir~
 %patch36 -p1 -b .qthl~
@@ -274,6 +274,9 @@ popd
 
 # Second build: vim-enhanced
 pushd .enhanced
+# We use --disable-gpm here because gpm in vim running in konsole
+# "breaks" cut&paste -- cut&paste is far more useful than vim
+# mouse control.
 %configure \
 	--localedir=%{_localedir} \
 	--disable-selinux \
@@ -288,6 +291,7 @@ pushd .enhanced
 	--with-x=no \
 	--enable-gui=no \
 	--with-tlib=ncurses \
+	--disable-gpm \
 	--with-compiledby="%{vendor} %{bugurl}" \
 	--with-modified-by="the OpenMandriva team <om-cooker@lists.openmandriva.org>"
 
