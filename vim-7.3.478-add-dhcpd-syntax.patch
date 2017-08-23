@@ -1,12 +1,23 @@
---- vim73/runtime/filetype.vim.dhcpd~	2012-03-23 16:26:05.959014054 +0100
-+++ vim73/runtime/filetype.vim	2012-03-23 16:26:15.984024521 +0100
-@@ -2498,6 +2498,9 @@ runtime! ftdetect/*.vim
+diff --git a/runtime/filetype.vim b/runtime/filetype.vim
+index 9a66950..9854649 100644
+--- a/runtime/filetype.vim
++++ b/runtime/filetype.vim
+@@ -2816,7 +2816,7 @@ au BufNewFile,BufRead zsh*,zlog*		call s:StarSetf('zsh')
+ au BufNewFile,BufRead *.text,README		setf text
+ 
+ " Help files match *.txt but should have a last line that is a modeline.
+-au BufNewFile,BufRead *.txt	
++au BufNewFile,BufRead *.txt
+ 	\  if getline('$') !~ 'vim:.*ft=help'
+ 	\|   setf text
+ 	\| endif
+@@ -2831,6 +2831,9 @@ runtime! ftdetect/*.vim
  " state.
  augroup END
  
 +" dhcpd.conf
 +au BufNewFile,BufRead dhcpd.conf                setf dhcpd
 +
- " Generic configuration file (check this last, it's just guessing!)
+ " Generic configuration file. Use FALLBACK, it's just guessing!
  au filetypedetect BufNewFile,BufRead,StdinReadPost *
  	\ if !did_filetype() && expand("<amatch>") !~ g:ft_ignore_pat
