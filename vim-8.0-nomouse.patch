@@ -8,9 +8,9 @@
 -  set mouse=a
 -endif
 +" It breaks the usual means of cut&paste though...
-+"if has('mouse')
-+"  set mouse=a
-+"endif
++if has('mouse')
++  set mouse=""
++endif
  
  " Switch syntax highlighting on when the terminal has colors or when using the
  " GUI (which always has colors).
