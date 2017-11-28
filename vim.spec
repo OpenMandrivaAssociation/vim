@@ -2,7 +2,6 @@
 # - this package is not prefixable
 # - to update official patches, aka SOURCE4, see README.upstream_patches in SOURCE4
 
-%define dlurl	https://github.com/vim
 %define rversion %(echo %version |cut -d. -f1-2)
 %define official_ptchlvl %(echo %version |cut -d. -f3)
 %define __noautoreq '.*/bin/awk|.*/bin/gawk'
@@ -22,7 +21,7 @@ Summary:	VIsual editor iMproved
 Url:		http://www.vim.org/
 License:	Charityware
 Group:		Editors
-Source0:	%{dlurl}/vim/archive/v%{version}.tar.gz
+Source0:	https://github.com/vim/vim/archive/v%{version}.tar.gz
 # read README.omv prior updating official patches:
 Source3:	README.omv
 # http://vim.sourceforge.net/scripts/script.php?script_id=98
