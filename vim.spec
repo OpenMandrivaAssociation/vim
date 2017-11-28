@@ -15,7 +15,7 @@
 %define longtitle	All-purpose text editor
 
 Name:		vim
-Version:	8.0.0999
+Version:	8.0.1354
 Release:	1
 Summary:	VIsual editor iMproved
 Url:		http://www.vim.org/
@@ -182,15 +182,15 @@ cp -a %{SOURCE12} runtime/colors
 
 #mdk patches
 %patch1 -p1 -b .nomouse~
-%patch2 -p1
+%patch2 -p1 -b .p2~
 %patch3 -p1 -b .spec~
 %patch8 -p1 -b .manpath~
 %patch10 -p1 -b .xxdloc~
 %patch20 -p1 -b .warly~
-%patch22 -p0
-%patch24 -p0
+%patch22 -p0 -b .p22~
+%patch24 -p1 -b .p24~
 %patch25 -p1 -b .p25~
-%patch27 -p0
+%patch27 -p0 -b .p27~
 %patch28 -p1 -b .pomode~
 %patch30 -p1 -b .dhcpd~
 %patch33 -p1 -b .security~

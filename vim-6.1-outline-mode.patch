@@ -1,5 +1,26 @@
---- runtime/syntax/outline.vim.tv	2002-11-01 14:38:26.000000000 -0500
-+++ runtime/syntax/outline.vim	2002-11-01 15:31:00.000000000 -0500
+--- vim-8.0.1354/runtime/filetype.vim.p24~	2017-11-28 18:54:45.429518251 +0100
++++ vim-8.0.1354/runtime/filetype.vim	2017-11-28 18:55:09.649591235 +0100
+@@ -1124,6 +1124,18 @@ au BufNewFile,BufRead *.pdf			setf pdf
+ " PCMK - HAE - crm configure edit 
+ au BufNewFile,BufRead *.pcmk 			setf pcmk
+ 
++" outline emacs file (TODO lists, ...)
++au BufNewFile,BufRead *		call FTCheck_outline()
++
++fun! FTCheck_outline()
++  " recognize Prolog by specific text in the first non-empty line
++  " require a blank after the '%' because Perl uses "%list" and "%translate"
++  let l = getline(nextnonblank(1))
++  if l =~ '-\*-\soutline\s-\*-'
++    setf outline
++  endif
++endfun
++
+ " Perl
+ if has("fname_case")
+   au BufNewFile,BufRead *.pl,*.PL		call dist#ft#FTpl()
+--- vim-8.0.1354/runtime/syntax/outline.vim.p24~	2017-11-28 18:54:45.429518251 +0100
++++ vim-8.0.1354/runtime/syntax/outline.vim	2017-11-28 18:54:45.429518251 +0100
 @@ -0,0 +1,23 @@
 +" Filename:    outline.vim
 +" Purpose:     Vim syntax file
@@ -24,24 +45,3 @@
 +let b:current_syntax = "outline"
 +
 +" vim: ts=8
---- runtime/filetype.vim.tv	2002-11-01 14:38:20.000000000 -0500
-+++ runtime/filetype.vim	2002-11-01 14:42:22.000000000 -0500
-@@ -1254,6 +1254,18 @@ au BufNewFile,BufRead *.dpr			setf pasca
- " PDF
- au BufNewFile,BufRead *.pdf			setf pdf
- 
-+" outline emacs file (TODO lists, ...)
-+au BufNewFile,BufRead *		call FTCheck_outline()
-+
-+fun! FTCheck_outline()
-+  " recognize Prolog by specific text in the first non-empty line
-+  " require a blank after the '%' because Perl uses "%list" and "%translate"
-+  let l = getline(nextnonblank(1))
-+  if l =~ '-\*-\soutline\s-\*-'
-+    setf outline
-+  endif
-+endfun
-+
- " Perl
- if has("fname_case")
-   au BufNewFile,BufRead *.pl,*.PL		call s:FTpl()
