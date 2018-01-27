@@ -15,7 +15,7 @@
 %define longtitle	All-purpose text editor
 
 Name:		vim
-Version:	8.0.1428
+Version:	8.0.1432
 Release:	1
 Summary:	VIsual editor iMproved
 Url:		http://www.vim.org/
@@ -312,6 +312,7 @@ pushd .minimal
 	--disable-gui \
 	--disable-acl \
 	--disable-pythoninterp \
+	--disable-python3interp \
 	--disable-perlinterp \
 	--with-x=no \
 	--enable-gui=no \
