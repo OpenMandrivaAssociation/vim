@@ -16,7 +16,7 @@
 
 Name:		vim
 Version:	8.0.1523
-Release:	1
+Release:	2
 Summary:	VIsual editor iMproved
 Url:		http://www.vim.org/
 License:	Charityware
@@ -106,7 +106,7 @@ contains files which every VIM binary will need in order to run.
 Summary:	A minimal version of the VIM editor
 Group:		Editors
 Provides:	vim
-Requires(post,postun):	update-alternatives
+Requires(post,postun):	chkconfig
 Requires(post,postun):	rpm-helper
 Requires(post,postun):	bash
 
@@ -121,11 +121,11 @@ when only the root partition is present.
 %package	enhanced
 Summary:	A version of the VIM editor which includes recent enhancements
 Group:		Editors
-Requires(post,postun):	update-alternatives
+Requires(post,postun):	chkconfig
 Requires(post,postun):	rpm-helper
 Requires(post,postun):	bash
 Requires:	vim-common >= %{EVRD}
-Obsoletes:	vim-color
+Obsoletes:	vim-color < 8.0.1523-1
 Provides:	vim
 Provides:	vim-color
 
@@ -151,7 +151,8 @@ Requires(post,postun):	update-alternatives
 Requires(post,postun):	rpm-helper
 Requires(post,postun):	bash
 Requires:	vim-common >= %{EVRD}
-Suggests: 	config(adwaita-gtk3-theme)
+Recommends: 	config(adwaita-gtk3-theme)
+
 %description	X11
 VIM (VIsual editor iMproved) is an updated and improved version of the vi
 editor. Vi was the first real screen-based editor for UNIX, and is still
