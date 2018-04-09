@@ -15,8 +15,8 @@
 %define longtitle	All-purpose text editor
 
 Name:		vim
-Version:	8.0.1523
-Release:	2
+Version:	8.0.1679
+Release:	1
 Summary:	VIsual editor iMproved
 Url:		http://www.vim.org/
 License:	Charityware
@@ -52,7 +52,6 @@ Patch20:	vimrc_hebrew.patch
 Patch22:	vim-6.1-fix-xterms-comments.patch
 Patch24:	vim-6.1-outline-mode.patch
 Patch25:	vim-6.1-xterm-s-insert.patch
-Patch27:	vim-6.1-rpm42.patch
 Patch28:	vim-7.4-po-mode.patch
 Patch30:	vim-7.3.478-add-dhcpd-syntax.patch
 Patch33:	vim-7.4.005-CVE-2009-0316-debian.patch
@@ -191,7 +190,6 @@ cp -a %{SOURCE12} runtime/colors
 %patch22 -p0 -b .p22~
 %patch24 -p1 -b .p24~
 %patch25 -p1 -b .p25~
-%patch27 -p0 -b .p27~
 %patch28 -p1 -b .pomode~
 %patch30 -p1 -b .dhcpd~
 %patch33 -p1 -b .security~

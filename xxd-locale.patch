@@ -1,6 +1,7 @@
---- vim74/src/xxd/xxd.c.xxdloc~	2015-04-15 10:55:49.781922901 +0200
-+++ vim74/src/xxd/xxd.c	2015-04-15 10:59:03.076275684 +0200
-@@ -97,6 +97,7 @@
+diff -up vim-8.0.1679/src/xxd/xxd.c.xxdloc~ vim-8.0.1679/src/xxd/xxd.c
+--- vim-8.0.1679/src/xxd/xxd.c.xxdloc~	2018-04-08 16:34:22.000000000 +0200
++++ vim-8.0.1679/src/xxd/xxd.c	2018-04-09 21:36:06.403281764 +0200
+@@ -93,6 +93,7 @@
  #if __MWERKS__ && !defined(BEBOX)
  # include <unix.h>	/* for fdopen() on MAC */
  #endif
@@ -8,7 +9,7 @@
  
  #if defined(__BORLANDC__) && __BORLANDC__ <= 0x0410 && !defined(fileno)
  /* Missing define and prototype grabbed from the BC 4.0 <stdio.h> */
-@@ -482,6 +483,11 @@ main(argc, argv)
+@@ -469,6 +470,11 @@ main(int argc, char *argv[])
    long length = -1, n = 0, seekoff = 0, displayoff = 0;
    static char l[LLEN+1];  /* static because it may be too big for stack */
    char *pp;
@@ -20,12 +21,12 @@
  
  #ifdef AMIGA
    /* This program doesn't work when started from the Workbench */
-@@ -852,7 +858,7 @@ main(argc, argv)
+@@ -844,7 +850,7 @@ main(int argc, char *argv[])
  #else
  	  (e > 31 && e < 127)
  #endif
 -	  ? e : '.';
 +	  ? e : isalnum(e) ? e : '.';
-       if (e)
- 	nonzero++;
        n++;
+       if (++p == cols)
+ 	{
