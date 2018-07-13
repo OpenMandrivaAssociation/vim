@@ -65,6 +65,7 @@ Patch38:	vim-7.3.478-dont-check-for-xsetlocale.patch
 # Fedora patches
 Patch101:	vim-7.4-fstabsyntax.patch
 
+BuildRequires:	perl(ExtUtils::Embed)
 BuildRequires:	pkgconfig(lua)
 BuildRequires:	pkgconfig(python)
 %if %{with python3}
