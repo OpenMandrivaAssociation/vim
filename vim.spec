@@ -15,8 +15,8 @@
 %define longtitle	All-purpose text editor
 
 Name:		vim
-Version:	8.1.0490
-Release:	2
+Version:	8.1.0702
+Release:	1
 Summary:	VIsual editor iMproved
 Url:		http://www.vim.org/
 License:	Charityware
@@ -74,7 +74,7 @@ BuildRequires:	pkgconfig(python3)
 BuildRequires:	perl-devel
 BuildRequires:	acl-devel
 %if %{with gui}
-BuildRequires:	pkgconfig(gtk+-2.0)
+BuildRequires:	pkgconfig(gtk+-3.0)
 BuildRequires:	pkgconfig(ncursesw)
 BuildRequires:	pkgconfig(xt)
 BuildRequires:	tcl

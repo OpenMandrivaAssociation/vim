@@ -1,11 +1,12 @@
---- vim-8.0.1354/runtime/filetype.vim.p24~	2017-11-28 18:54:45.429518251 +0100
-+++ vim-8.0.1354/runtime/filetype.vim	2017-11-28 18:55:09.649591235 +0100
-@@ -1124,6 +1124,18 @@ au BufNewFile,BufRead *.pdf			setf pdf
- " PCMK - HAE - crm configure edit 
+diff -up vim-8.1.0702/runtime/filetype.vim.p24~ vim-8.1.0702/runtime/filetype.vim
+--- vim-8.1.0702/runtime/filetype.vim.p24~	2019-01-08 02:51:19.793920770 +0100
++++ vim-8.1.0702/runtime/filetype.vim	2019-01-08 02:54:10.110312115 +0100
+@@ -1132,6 +1132,18 @@ au BufNewFile,BufRead *.pdf			setf pdf
+ " PCMK - HAE - crm configure edit
  au BufNewFile,BufRead *.pcmk 			setf pcmk
  
 +" outline emacs file (TODO lists, ...)
-+au BufNewFile,BufRead *		call FTCheck_outline()
++au BufNewFile,BufRead *                call FTCheck_outline()
 +
 +fun! FTCheck_outline()
 +  " recognize Prolog by specific text in the first non-empty line
@@ -19,8 +20,9 @@
  " Perl
  if has("fname_case")
    au BufNewFile,BufRead *.pl,*.PL		call dist#ft#FTpl()
---- vim-8.0.1354/runtime/syntax/outline.vim.p24~	2017-11-28 18:54:45.429518251 +0100
-+++ vim-8.0.1354/runtime/syntax/outline.vim	2017-11-28 18:54:45.429518251 +0100
+diff -up vim-8.1.0702/runtime/syntax/outline.vim.p24~ vim-8.1.0702/runtime/syntax/outline.vim
+--- vim-8.1.0702/runtime/syntax/outline.vim.p24~	2019-01-08 02:51:19.793920770 +0100
++++ vim-8.1.0702/runtime/syntax/outline.vim	2019-01-08 02:51:19.793920770 +0100
 @@ -0,0 +1,23 @@
 +" Filename:    outline.vim
 +" Purpose:     Vim syntax file
