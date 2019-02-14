@@ -4,7 +4,8 @@
 
 %define rversion %(echo %version |cut -d. -f1-2)
 %define official_ptchlvl %(echo %version |cut -d. -f3)
-%global __requires_exclude perl\\(getopts.pl\\)|.*/bin/awk|.*/bin/gawk
+%global __requires_exclude perl\\(getopts.pl\\)
+%global __requires_exclude_from %{_datadir}/vim
 %global	ldflags	%{ldflags} -Wl,--error-unresolved-symbols
 
 # Should we build X11 gui
