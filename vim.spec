@@ -4,7 +4,7 @@
 
 %define rversion %(echo %version |cut -d. -f1-2)
 %define official_ptchlvl %(echo %version |cut -d. -f3)
-%define __noautoreq '.*/bin/awk|.*/bin/gawk'
+%global __requires_exclude perl\\(getopts.pl\\)|.*/bin/awk|.*/bin/gawk
 %global	ldflags	%{ldflags} -Wl,--error-unresolved-symbols
 
 # Should we build X11 gui
@@ -16,7 +16,7 @@
 
 Name:		vim
 Version:	8.1.0847
-Release:	1
+Release:	2
 Summary:	VIsual editor iMproved
 Url:		http://www.vim.org/
 License:	Charityware
@@ -72,7 +72,7 @@ BuildRequires:	pkgconfig(python)
 BuildRequires:	pkgconfig(python3)
 %endif
 BuildRequires:	perl-devel
-BuildRequires:	acl-devel
+BuildRequires:	pkgconfig(libacl)
 %if %{with gui}
 BuildRequires:	pkgconfig(gtk+-3.0)
 BuildRequires:	pkgconfig(ncursesw)
@@ -211,13 +211,13 @@ sed -i -e 's,/usr/lib64/perl5/CORE,%{_libdir}/perl5/CORE,g' src/configure.ac
 # copying the entire directory
 find . -name "*.*~" |xargs rm -f
 
-perl -pi -e 's|SYS_VIMRC_FILE "\$VIM/vimrc"|SYS_VIMRC_FILE "%{_sysconfdir}/vim/vimrc"|' src/os_unix.h
-perl -pi -e 's|SYS_GVIMRC_FILE "\$VIM/gvimrc"|SYS_GVIMRC_FILE "%{_sysconfdir}/vim/gvimrc"|' src/os_unix.h
+sed -i -e 's|SYS_VIMRC_FILE "\$VIM/vimrc"|SYS_VIMRC_FILE "%{_sysconfdir}/vim/vimrc"|' src/os_unix.h
+sed -i -e 's|SYS_GVIMRC_FILE "\$VIM/gvimrc"|SYS_GVIMRC_FILE "%{_sysconfdir}/vim/gvimrc"|' src/os_unix.h
 # disable command echo
 for i in runtime/{gvimrc_example.vim,vimrc_example.vim}; do
-	 perl -pi -e 's!^set showcmd!set noshowcmd!' $i
+	 sed -i -e 's|^set showcmd|set noshowcmd|' $i
 done
-perl -pi -e 's|\Qsvn-commit.*.tmp\E|svn-commit*.tmp|' ./runtime/filetype.vim
+sed -i -e 's|\Qsvn-commit.*.tmp\E|svn-commit*.tmp|' ./runtime/filetype.vim
 pushd src
 autoconf
 popd
@@ -272,7 +272,7 @@ pushd .gui
 	--with-compiledby="%{vendor} %{bugurl}" \
 	--with-modified-by="the OpenMandriva team <om-cooker@lists.openmandriva.org>"
 
-%make
+%make_build
 popd
 %endif
 
@@ -299,7 +299,7 @@ pushd .enhanced
 	--with-compiledby="%{vendor} %{bugurl}" \
 	--with-modified-by="the OpenMandriva team <om-cooker@lists.openmandriva.org>"
 
-%make
+%make_build
 popd
 
 # Third build: vim-minimal
@@ -326,7 +326,7 @@ pushd .minimal
 	--with-compiledby="%{vendor} %{bugurl}" \
 	--with-modified-by="the OpenMandriva team <om-cooker@lists.openmandriva.org>"
 
-%make
+%make_build
 popd
 
 cp -al runtime/doc doc
@@ -343,7 +343,7 @@ ln -s tutor.fr runtime/tutor/tutor.br
 ln -s menu_fr_fr.iso_8859-15.vim runtime/lang/menu_br
 
 %install
-%makeinstall_std -C .enhanced VIMRTDIR=""
+%make_install -C .enhanced VIMRTDIR=""
 
 
 make -C .enhanced/src installmacros prefix=%{buildroot}%{_prefix} VIMRTDIR=""
