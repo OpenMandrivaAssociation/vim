@@ -17,7 +17,7 @@
 
 Name:		vim
 Version:	8.1.0847
-Release:	2
+Release:	3
 Summary:	VIsual editor iMproved
 Url:		http://www.vim.org/
 License:	Charityware
