@@ -16,8 +16,8 @@
 %define longtitle	All-purpose text editor
 
 Name:		vim
-Version:	8.1.0847
-Release:	3
+Version:	8.1.0983
+Release:	1
 Summary:	VIsual editor iMproved
 Url:		http://www.vim.org/
 License:	Charityware
@@ -95,7 +95,6 @@ Group:		Editors
 Conflicts:	man-pages-fr < 1.68.0-2mdk
 Conflicts:	man-pages-it < 0.3.4-2mdk
 Conflicts:	man-pages-pl <= 0.4-10mdk
-Conflicts:	git-core < 1:1.6.0.1-2mdv
 
 %description	common
 VIM (VIsual editor iMproved) is an updated and improved version of the vi

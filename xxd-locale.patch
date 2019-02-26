@@ -1,7 +1,7 @@
-diff -up vim-8.0.1679/src/xxd/xxd.c.xxdloc~ vim-8.0.1679/src/xxd/xxd.c
---- vim-8.0.1679/src/xxd/xxd.c.xxdloc~	2018-04-08 16:34:22.000000000 +0200
-+++ vim-8.0.1679/src/xxd/xxd.c	2018-04-09 21:36:06.403281764 +0200
-@@ -93,6 +93,7 @@
+diff -up vim-8.1.0983/src/xxd/xxd.c.xxdloc~ vim-8.1.0983/src/xxd/xxd.c
+--- vim-8.1.0983/src/xxd/xxd.c.xxdloc~	2019-02-26 17:03:54.000000000 +0100
++++ vim-8.1.0983/src/xxd/xxd.c	2019-02-26 22:31:31.438115632 +0100
+@@ -95,6 +95,7 @@
  #if __MWERKS__ && !defined(BEBOX)
  # include <unix.h>	/* for fdopen() on MAC */
  #endif
@@ -9,19 +9,20 @@ diff -up vim-8.0.1679/src/xxd/xxd.c.xxdloc~ vim-8.0.1679/src/xxd/xxd.c
  
  #if defined(__BORLANDC__) && __BORLANDC__ <= 0x0410 && !defined(fileno)
  /* Missing define and prototype grabbed from the BC 4.0 <stdio.h> */
-@@ -469,6 +470,11 @@ main(int argc, char *argv[])
-   long length = -1, n = 0, seekoff = 0, displayoff = 0;
-   static char l[LLEN+1];  /* static because it may be too big for stack */
+@@ -474,6 +475,12 @@ main(int argc, char *argv[])
    char *pp;
+   int addrlen = 9;
+ 
 +  char *lang=getenv("LANG");
 +  if(!lang) lang=getenv("LC_ALL");
 +  if(!lang) lang=getenv("LC_CTYPE");
 +  if(lang)
 +         setlocale(LC_ALL, lang);
- 
++
  #ifdef AMIGA
    /* This program doesn't work when started from the Workbench */
-@@ -844,7 +850,7 @@ main(int argc, char *argv[])
+   if (argc == 0)
+@@ -860,7 +867,7 @@ main(int argc, char *argv[])
  #else
  	  (e > 31 && e < 127)
  #endif
