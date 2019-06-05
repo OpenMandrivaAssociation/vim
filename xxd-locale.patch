@@ -1,15 +1,15 @@
-diff -up vim-8.1.0983/src/xxd/xxd.c.xxdloc~ vim-8.1.0983/src/xxd/xxd.c
---- vim-8.1.0983/src/xxd/xxd.c.xxdloc~	2019-02-26 17:03:54.000000000 +0100
-+++ vim-8.1.0983/src/xxd/xxd.c	2019-02-26 22:31:31.438115632 +0100
+diff -up vim-8.1.1471/src/xxd/xxd.c.xxdloc~ vim-8.1.1471/src/xxd/xxd.c
+--- vim-8.1.1471/src/xxd/xxd.c.xxdloc~	2019-06-05 22:57:04.000000000 +0200
++++ vim-8.1.1471/src/xxd/xxd.c	2019-06-06 01:10:11.403136154 +0200
 @@ -95,6 +95,7 @@
  #if __MWERKS__ && !defined(BEBOX)
  # include <unix.h>	/* for fdopen() on MAC */
  #endif
 +#include <locale.h>
  
- #if defined(__BORLANDC__) && __BORLANDC__ <= 0x0410 && !defined(fileno)
- /* Missing define and prototype grabbed from the BC 4.0 <stdio.h> */
-@@ -474,6 +475,12 @@ main(int argc, char *argv[])
+ 
+ /*  This corrects the problem of missing prototypes for certain functions
+@@ -468,6 +469,12 @@ main(int argc, char *argv[])
    char *pp;
    int addrlen = 9;
  
@@ -22,7 +22,7 @@ diff -up vim-8.1.0983/src/xxd/xxd.c.xxdloc~ vim-8.1.0983/src/xxd/xxd.c
  #ifdef AMIGA
    /* This program doesn't work when started from the Workbench */
    if (argc == 0)
-@@ -860,7 +867,7 @@ main(int argc, char *argv[])
+@@ -854,7 +861,7 @@ main(int argc, char *argv[])
  #else
  	  (e > 31 && e < 127)
  #endif
