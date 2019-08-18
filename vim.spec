@@ -16,7 +16,7 @@
 %define longtitle	All-purpose text editor
 
 Name:		vim
-Version:	8.1.1879
+Version:	8.1.1888
 Release:	1
 Summary:	VIsual editor iMproved
 Url:		http://www.vim.org/
