@@ -16,7 +16,7 @@
 %define longtitle	All-purpose text editor
 
 Name:		vim
-Version:	8.1.2080
+Version:	8.1.2104
 Release:	1
 Summary:	VIsual editor iMproved
 Url:		http://www.vim.org/
@@ -46,7 +46,7 @@ Source100:	vim.rpmlintrc
 # MDK patches
 Patch1:		vim-8.0-nomouse.patch
 Patch2:		vim-5.6a-paths.patch
-Patch3:		vim-7.4.005-rpm-spec-syntax.patch
+#Patch3:		vim-7.4.005-rpm-spec-syntax.patch
 Patch4:		vim-8.1-perl-includes.patch
 Patch8:		vim-6.0af-man-path.patch
 Patch10:	xxd-locale.patch
@@ -185,7 +185,7 @@ cp -a %{SOURCE12} runtime/colors
 #mdk patches
 %patch1 -p1 -b .nomouse~
 %patch2 -p1 -b .p2~
-%patch3 -p1 -b .spec~
+#% patch3 -p1 -b .spec~
 %patch4 -p1 -b .perlinc~
 %if "%{_libdir}" != "/usr/lib64"
 sed -i -e 's,/usr/lib64/perl5/CORE,%{_libdir}/perl5/CORE,g' src/configure.ac
