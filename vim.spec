@@ -17,13 +17,12 @@
 
 Name:		vim
 Version:	8.1.2292
-Release:	1
+Release:	2
 Summary:	VIsual editor iMproved
 Url:		http://www.vim.org/
 License:	Charityware
 Group:		Editors
 Source0:	https://github.com/vim/vim/archive/v%{version}.tar.gz
-# read README.omv prior updating official patches:
 Source3:	README.omv
 # http://vim.sourceforge.net/scripts/script.php?script_id=98
 Source5:	vim-spec-3.0.bz2
@@ -47,6 +46,7 @@ Source100:	vim.rpmlintrc
 Patch2:		vim-5.6a-paths.patch
 #Patch3:		vim-7.4.005-rpm-spec-syntax.patch
 Patch4:		vim-8.1-perl-includes.patch
+Patch5:		vim-8.1.2292-defaults.patch
 Patch8:		vim-6.0af-man-path.patch
 Patch10:	xxd-locale.patch
 Patch20:	vimrc_hebrew.patch
@@ -184,6 +184,7 @@ cp -a %{SOURCE12} runtime/colors
 %patch2 -p1 -b .p2~
 #% patch3 -p1 -b .spec~
 %patch4 -p1 -b .perlinc~
+%patch5 -p1 -b .defaults~
 %if "%{_libdir}" != "/usr/lib64"
 sed -i -e 's,/usr/lib64/perl5/CORE,%{_libdir}/perl5/CORE,g' src/configure.ac
 %endif
