@@ -16,7 +16,7 @@
 %define longtitle	All-purpose text editor
 
 Name:		vim
-Version:	8.1.2384
+Version:	8.2.0000
 Release:	1
 Summary:	VIsual editor iMproved
 Url:		http://www.vim.org/
@@ -55,7 +55,6 @@ Patch24:	vim-6.1-outline-mode.patch
 Patch25:	vim-6.1-xterm-s-insert.patch
 Patch28:	vim-7.4-po-mode.patch
 Patch30:	vim-7.3.478-add-dhcpd-syntax.patch
-Patch33:	vim-7.4.005-CVE-2009-0316-debian.patch
 # (proyvind): fix path to locale files
 Patch35:	vim-7.4.005-use-proper-localedir.patch
 Patch37:	vim-7.3.381-always-install-icons.patch
@@ -196,7 +195,6 @@ sed -i -e 's,/usr/lib64/perl5/CORE,%{_libdir}/perl5/CORE,g' src/configure.ac
 %patch25 -p1 -b .p25~
 %patch28 -p1 -b .pomode~
 %patch30 -p1 -b .dhcpd~
-%patch33 -p1 -b .security~
 #patch35 -p1 -b .localedir~
 #patch37 -p1 -b .icons_install~
 #patch38 -p1 -b .xsetlocale~
