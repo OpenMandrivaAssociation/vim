@@ -1,6 +1,6 @@
-diff -up vim-8.1.1486/runtime/syntax/fstab.vim.fstab~ vim-8.1.1486/runtime/syntax/fstab.vim
---- vim-8.1.1486/runtime/syntax/fstab.vim.fstab~	2019-06-06 22:50:35.000000000 +0200
-+++ vim-8.1.1486/runtime/syntax/fstab.vim	2019-06-07 02:20:44.755057246 +0200
+diff -up vim81/runtime/syntax/fstab.vim.fstabsyntax vim81/runtime/syntax/fstab.vim
+--- vim81/runtime/syntax/fstab.vim.fstabsyntax	2019-06-11 09:55:23.000000000 +0200
++++ vim81/runtime/syntax/fstab.vim	2019-06-11 10:14:22.223616868 +0200
 @@ -56,7 +56,7 @@ syn keyword fsMountPointKeyword containe
  " Type
  syn cluster fsTypeCluster contains=fsTypeKeyword,fsTypeUnknown
