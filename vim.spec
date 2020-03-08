@@ -253,10 +253,6 @@ perl -pi -e "s,bin/nawk,bin/awk,g" runtime/tools/mve.awk
 %patch3018 -p1
 
 %build
-%if 0%{?rhel} > 7
-export RHEL_ALLOW_PYTHON2_FOR_BUILD=1
-%endif
-
 cd src
 autoconf
 
@@ -319,8 +315,8 @@ export LDFLAGS="%{build_ldflags} $(python3-config --libs --embed)"
   --with-tlib=ncurses \
   --enable-gtk3-check --enable-gui=gtk3 \
   --enable-fips-warning \
-  --with-compiledby="<bugzilla@redhat.com>" --enable-cscope \
-  --with-modified-by="<bugzilla@redhat.com>" \
+  --with-compiledby="<bugzilla@openmandriva.org>" --enable-cscope \
+  --with-modified-by="<bugzilla@openmandriva.org>" \
 %if "%{withnetbeans}" == "1"
   --enable-netbeans \
 %else
@@ -354,10 +350,10 @@ make clean
  --disable-tclinterp \
  --with-x=no \
  --enable-gui=no --exec-prefix=%{_prefix} --enable-multibyte \
- --enable-cscope --with-modified-by="<bugzilla@redhat.com>" \
+ --enable-cscope --with-modified-by="<bugzilla@openmandriva.org>" \
  --with-tlib=ncurses \
  --enable-fips-warning \
- --with-compiledby="<bugzilla@redhat.com>" \
+ --with-compiledby="<bugzilla@openmandriva.org>" \
 %if "%{withnetbeans}" == "1"
   --enable-netbeans \
 %else
@@ -527,12 +523,6 @@ cp %{SOURCE2} %{buildroot}/%{_sysconfdir}/profile.d/vim.csh
 chmod 0644 %{buildroot}/%{_sysconfdir}/profile.d/vim.*
 install -p -m644 %{SOURCE4} %{buildroot}/%{_sysconfdir}/virc
 install -p -m644 %{SOURCE5} %{buildroot}/%{_sysconfdir}/vimrc
-
-# if Vim isn't built for Fedora, use redhat augroup
-%if 0%{?rhel} >= 7
-sed -i -e "s/augroup fedora/augroup redhat/" %{buildroot}/%{_sysconfdir}/vimrc
-sed -i -e "s/augroup fedora/augroup redhat/" %{buildroot}/%{_sysconfdir}/virc
-%endif
 
 mkdir -p %{buildroot}%{_rpmconfigdir}/macros.d/
 install -p -m644 %{SOURCE15} %{buildroot}%{_rpmconfigdir}/macros.d/
