@@ -190,7 +190,8 @@ BuildRequires:	pkgconfig(ice)
 BuildRequires:	pkgconfig(sm)
 BuildRequires:	appstream-util
 
-Requires: vim-common = %{epoch}:%{version}-%{release} libattr >= 2.4 gtk3 
+Requires: vim-common = %{epoch}:%{version}-%{release}
+Requires: %{_lib}gtk3_0
 Provides: gvim
 Provides: %{_bindir}/mergetool
 Provides: %{_bindir}/gvim
