@@ -24,7 +24,7 @@ Summary: The VIM editor
 URL:     http://www.vim.org/
 Name: vim
 Version:	8.2.0692
-Release:	1
+Release:	2
 License: Vim and MIT
 Source0: https://github.com/vim/vim/archive/v%{version}.tar.gz
 Source1: vim.sh
@@ -40,6 +40,20 @@ Source13: vim-spell-files.tar.bz2
 %endif
 Source14: spec-template.new
 Source15: macros.vim
+# C++11/C++14/C++17 syntax highlighting, Version 0.931 from
+# https://www.vim.org/scripts/script.php?script_id=4293
+Source20: https://raw.githubusercontent.com/Mizuchi/STL-Syntax/master/after/syntax/cpp/stl.vim
+# Assorted extra syntax highlighting files
+Source21: http://trific.ath.cx/Ftp/vim/syntax/dhcpd.vim
+Source22: apparmor.vim
+Source23: cfengine.vim
+Source24: nagios.vim
+
+# Special syntax highlighting and indentation for
+# Qt keywords (Q_OBJECT and friends)
+Patch1000: vim-8.2-qt-highlighting.patch
+# Don't replace "good" characters with .
+Patch1001: xxd-locale.patch
 
 Patch2002: vim-7.0-fixkeys.patch
 Patch2003: vim-7.4-specsyntax.patch
@@ -224,8 +238,15 @@ vim-common package.
 %prep
 %setup -q -b 0
 
+# Additional syntax highlighting support
+mkdir runtime/syntax/cpp
+cp %{S:20} runtime/syntax/cpp/
+cp %{S:21} %{S:22} %{S:23} %{S:24} runtime/syntax/
+
 # use %%{__python3} macro for defining shebangs in python3 tests
 sed -i -e 's,/usr/bin/python3,%{__python3},' %{PATCH3017}
+
+%patch1000 -p1 -b .qt~
 
 # fix rogue dependencies from sample code
 chmod -x runtime/tools/mve.awk
