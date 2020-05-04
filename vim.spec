@@ -23,8 +23,8 @@
 Summary: The VIM editor
 URL:     http://www.vim.org/
 Name: vim
-Version:	8.2.0692
-Release:	2
+Version:	8.2.0694
+Release:	1
 License: Vim and MIT
 Source0: https://github.com/vim/vim/archive/v%{version}.tar.gz
 Source1: vim.sh
