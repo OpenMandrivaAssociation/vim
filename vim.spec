@@ -23,7 +23,7 @@
 Summary: The VIM editor
 URL:     http://www.vim.org/
 Name: vim
-Version:	8.2.0856
+Version:	8.2.0938
 Release:	1
 License: Vim and MIT
 Source0: https://github.com/vim/vim/archive/v%{version}.tar.gz
@@ -675,6 +675,7 @@ touch %{buildroot}/%{_datadir}/%{name}/vimfiles/doc/tags
 %lang(ja) %{_mandir}/ja/man1/*
 %lang(pl) %{_mandir}/pl/man1/*
 %lang(ru) %{_mandir}/ru/man1/*
+%lang(tr) %{_mandir}/tr*/man1/*
 
 %if %{withvimspell}
 %files spell
