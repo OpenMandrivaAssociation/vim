@@ -1,14 +1,11 @@
-diff -up vim81/runtime/defaults.vim.copypaste vim81/runtime/defaults.vim
---- vim81/runtime/defaults.vim.copypaste	2019-10-30 10:30:23.108710252 +0100
-+++ vim81/runtime/defaults.vim	2019-10-30 10:36:19.127508406 +0100
-@@ -73,18 +73,6 @@ map Q gq
- " Revert with ":iunmap <C-U>".
- inoremap <C-U> <C-G>u<C-U>
- 
--" In many terminal emulators the mouse works just fine.  By enabling it you
--" can position the cursor, Visually select and scroll with the mouse.
--" Only xterm can grab the mouse events when using the shift key, for other
--" terminals use ":", select text and press Esc.
+diff --git a/runtime/defaults.vim b/runtime/defaults.vim
+index f3c639b..25f2707 100644
+--- a/runtime/defaults.vim
++++ b/runtime/defaults.vim
+@@ -77,13 +77,13 @@ inoremap <C-U> <C-G>u<C-U>
+ " can position the cursor, Visually select and scroll with the mouse.
+ " Only xterm can grab the mouse events when using the shift key, for other
+ " terminals use ":", select text and press Esc.
 -if has('mouse')
 -  if &term =~ 'xterm'
 -    set mouse=a
@@ -16,7 +13,13 @@ diff -up vim81/runtime/defaults.vim.copypaste vim81/runtime/defaults.vim
 -    set mouse=nvi
 -  endif
 -endif
--
- " Switch syntax highlighting on when the terminal has colors or when using the
- " GUI (which always has colors).
- if &t_Co > 2 || has("gui_running")
++# if has('mouse')
++#   if &term =~ 'xterm'
++#     set mouse=a
++#   else
++#     set mouse=nvi
++#   endif
++# endif
+ 
+ " Only do this part when Vim was compiled with the +eval feature.
+ if 1
