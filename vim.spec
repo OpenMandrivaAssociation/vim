@@ -75,7 +75,6 @@ Patch3016: vim-8.0-copy-paste.patch
 Patch3017: vim-python3-tests.patch
 # fips warning
 Patch3018: vim-crypto-warning.patch
-Patch3019: python3-configure.patch
 
 %if %{with python3}
 BuildRequires:	pkgconfig(python3)
@@ -274,7 +273,6 @@ perl -pi -e "s,bin/nawk,bin/awk,g" runtime/tools/mve.awk
 %patch3016 -p1 -b .copypaste
 %patch3017 -p1
 %patch3018 -p1
-%patch3019 -p1
 
 %build
 cd src
