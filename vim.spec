@@ -23,7 +23,7 @@
 Summary: The VIM editor
 URL:     http://www.vim.org/
 Name: vim
-Version:	8.2.1905
+Version:	8.2.1911
 Release:	1
 License: Vim and MIT
 Source0: https://github.com/vim/vim/archive/v%{version}.tar.gz
