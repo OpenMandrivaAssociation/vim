@@ -13,13 +13,13 @@ index f3c639b..25f2707 100644
 -    set mouse=nvi
 -  endif
 -endif
-+# if has('mouse')
-+#   if &term =~ 'xterm'
-+#     set mouse=a
-+#   else
-+#     set mouse=nvi
-+#   endif
-+# endif
++" if has('mouse')
++"   if &term =~ 'xterm'
++"     set mouse=a
++"   else
++"     set mouse=nvi
++"   endif
++" endif
  
  " Only do this part when Vim was compiled with the +eval feature.
  if 1
