@@ -23,7 +23,7 @@
 Summary: The VIM editor
 URL:     http://www.vim.org/
 Name: vim
-Version:	8.2.2201
+Version:	8.2.2238
 Release:	1
 License: Vim and MIT
 Source0: https://github.com/vim/vim/archive/v%{version}.tar.gz
@@ -754,6 +754,16 @@ touch %{buildroot}/%{_datadir}/%{name}/vimfiles/doc/tags
 %{_bindir}/vimdiff
 %{_bindir}/vimtutor
 %config(noreplace) %{_sysconfdir}/profile.d/vim.*
+
+%post enhanced
+if ! [ -e %{_bindir}/vi ]; then
+	ln -s vim %{_bindir}/vi
+fi
+
+%postun enhanced
+if [ -L %{_bindir}/vi -a ! -e %{_bindir}/vi ]; then
+	rm %{_bindir}/vi
+fi
 
 %files filesystem
 %{_rpmconfigdir}/macros.d/macros.vim
