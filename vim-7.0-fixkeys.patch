@@ -1,9 +1,9 @@
-diff -up vim81/src/term.c.fixkeys vim81/src/term.c
---- vim81/src/term.c.fixkeys	2019-12-12 09:00:20.685567074 +0100
-+++ vim81/src/term.c	2019-12-12 09:21:36.708769626 +0100
-@@ -957,14 +957,14 @@ static struct builtin_term builtin_termc
-     {K_XRIGHT,		IF_EB("\033[1;*C", ESC_STR "[1;*C")},
-     {K_XLEFT,		IF_EB("\033[1;*D", ESC_STR "[1;*D")},
+diff -up vim-8.2.2300/src/term.c.fixkeys vim-8.2.2300/src/term.c
+--- vim-8.2.2300/src/term.c.fixkeys	2021-01-04 20:44:28.049647125 +0100
++++ vim-8.2.2300/src/term.c	2021-01-04 20:45:33.394364642 +0100
+@@ -919,14 +919,14 @@ static struct builtin_term builtin_termc
+     {K_XRIGHT,		IF_EB("\033[@;*C", ESC_STR "[@;*C")},
+     {K_XLEFT,		IF_EB("\033[@;*D", ESC_STR "[@;*D")},
      // An extra set of function keys for vt100 mode
 -    {K_XF1,		IF_EB("\033O*P", ESC_STR "O*P")},
 -    {K_XF2,		IF_EB("\033O*Q", ESC_STR "O*Q")},
