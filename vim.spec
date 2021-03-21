@@ -23,7 +23,7 @@
 Summary: The VIM editor
 URL:     http://www.vim.org/
 Name: vim
-Version:	8.2.2497
+Version:	8.2.2632
 Release:	1
 License: Vim and MIT
 Source0: https://github.com/vim/vim/archive/v%{version}.tar.gz
@@ -161,7 +161,7 @@ Requires: vim-common = %{epoch}:%{version}-%{release} which
 Provides: vim
 Provides: %{_bindir}/mergetool
 Provides: %{_bindir}/vim
-# suggest python3, python2, lua, ruby and perl packages because of their 
+# suggest python3, python2, lua, ruby and perl packages because of their
 # embedded functionality in Vim/GVim
 Suggests: python3
 Suggests: perl(:MODULE_COMPAT_%(eval "`%{__perl} -V:version`"; echo $version)) perl-devel
@@ -210,7 +210,7 @@ Provides: gvim
 Provides: %{_bindir}/mergetool
 Provides: %{_bindir}/gvim
 Requires: hicolor-icon-theme
-# suggest python3, python2, lua, ruby and perl packages because of their 
+# suggest python3, python2, lua, ruby and perl packages because of their
 # embedded functionality in Vim/GVim
 Suggests: python3
 Suggests: perl(:MODULE_COMPAT_%(eval "`%{__perl} -V:version`"; echo $version)) perl-devel
@@ -413,7 +413,7 @@ rm -f README*.info
 
 cd src
 # Adding STRIP=/bin/true, because Vim wants to strip the binaries by himself
-# and put the stripped files into correct dirs. Build system (koji/brew) 
+# and put the stripped files into correct dirs. Build system (koji/brew)
 # does it for us, so there is no need to do it in Vim
 make install DESTDIR=%{buildroot} BINDIR=%{_bindir} VIMRCLOC=/etc VIMRUNTIMEDIR=/usr/share/vim/%{vimdir} STRIP=/bin/true
 make installgtutorbin  DESTDIR=%{buildroot} BINDIR=%{_bindir} VIMRCLOC=/etc VIMRUNTIMEDIR=/usr/share/vim/%{vimdir}
@@ -549,7 +549,7 @@ install -p -m644 %{SOURCE5} %{buildroot}/%{_sysconfdir}/vimrc
 mkdir -p %{buildroot}%{_rpmconfigdir}/macros.d/
 install -p -m644 %{SOURCE15} %{buildroot}%{_rpmconfigdir}/macros.d/
 
-(cd ../runtime; rm -rf doc; ln -svf ../../vim/%{vimdir}/doc docs;) 
+(cd ../runtime; rm -rf doc; ln -svf ../../vim/%{vimdir}/doc docs;)
 rm -f %{buildroot}/%{_datadir}/vim/%{vimdir}/macros/maze/maze*.c
 rm -rf %{buildroot}/%{_datadir}/vim/%{vimdir}/tools
 rm -rf %{buildroot}/%{_datadir}/vim/%{vimdir}/doc/vim2html.pl
@@ -568,7 +568,7 @@ for i in fr.UTF-8 it.UTF-8 pl.UTF-8 da.UTF-8 de.UTF-8; do
   rm -rf %{buildroot}/%{_mandir}/$i
 done
 
-for i in rvim.1 gvim.1 gex.1 gview.1 vimx.1; do 
+for i in rvim.1 gvim.1 gex.1 gview.1 vimx.1; do
   echo ".so man1/vim.1" > %{buildroot}/%{_mandir}/man1/$i
 done
 echo ".so man1/vimdiff.1" > %{buildroot}/%{_mandir}/man1/gvimdiff.1

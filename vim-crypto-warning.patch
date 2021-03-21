@@ -1,11 +1,11 @@
-diff -up vim81/src/config.h.in.crypto vim81/src/config.h.in
---- vim81/src/config.h.in.crypto	2019-07-26 07:58:51.000000000 +0200
-+++ vim81/src/config.h.in	2019-09-16 14:18:32.994110646 +0200
-@@ -490,3 +490,12 @@
- 
+diff --git a/src/config.h.in b/src/config.h.in
+index fbf4b24..0800db2 100644
+--- a/src/config.h.in
++++ b/src/config.h.in
+@@ -498,5 +498,14 @@
  /* Define to inline symbol or empty */
  #undef inline
-+
+ 
 +/* Do we need FIPS warning? */
 +#undef HAVE_FIPS_WARNING
 +
@@ -14,10 +14,14 @@ diff -up vim81/src/config.h.in.crypto vim81/src/config.h.in
 +
 +/* Link to fips_enabled file */
 +#undef FIPS_ENABLED_FILE_LINK
-diff -up vim81/src/configure.ac.crypto vim81/src/configure.ac
---- vim81/src/configure.ac.crypto	2019-09-16 14:18:32.990110675 +0200
-+++ vim81/src/configure.ac	2019-09-16 14:18:32.996110631 +0200
-@@ -534,6 +534,38 @@ else
++
+ /* Define if _SC_SIGSTKSZ is available via sysconf() */
+ #undef HAVE_SYSCONF_SIGSTKSZ
+diff --git a/src/configure.ac b/src/configure.ac
+index bf7d0c4..db99148 100644
+--- a/src/configure.ac
++++ b/src/configure.ac
+@@ -541,6 +541,38 @@ else
    AC_MSG_RESULT(yes)
  fi
  
@@ -56,10 +60,11 @@ diff -up vim81/src/configure.ac.crypto vim81/src/configure.ac
  dnl Check for Lua feature.
  AC_MSG_CHECKING(--enable-luainterp argument)
  AC_ARG_ENABLE(luainterp,
-diff -up vim81/src/crypt.c.crypto vim81/src/crypt.c
---- vim81/src/crypt.c.crypto	2019-09-16 14:18:32.996110631 +0200
-+++ vim81/src/crypt.c	2019-09-16 14:19:48.953550617 +0200
-@@ -524,6 +524,21 @@ crypt_check_method(int method)
+diff --git a/src/crypt.c b/src/crypt.c
+index 0164f1c..8e2825e 100644
+--- a/src/crypt.c
++++ b/src/crypt.c
+@@ -523,6 +523,21 @@ crypt_check_method(int method)
  	msg_scroll = TRUE;
  	msg(_("Warning: Using a weak encryption method; see :help 'cm'"));
      }
