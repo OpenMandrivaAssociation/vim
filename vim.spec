@@ -1,5 +1,6 @@
+# (tpg) do not enable it, as it is useless here
 %if %{?WITH_SELINUX:0}%{!?WITH_SELINUX:1}
-%define WITH_SELINUX 1
+%define WITH_SELINUX 0
 %endif
 %define desktop_file 1
 
@@ -21,10 +22,10 @@
 %bcond_without python3
 
 Summary: The VIM editor
-URL:     http://www.vim.org/
+URL: http://www.vim.org/
 Name: vim
-Version:	8.2.2632
-Release:	1
+Version: 8.2.2632
+Release: 2
 License: Vim and MIT
 Source0: https://github.com/vim/vim/archive/v%{version}.tar.gz
 Source1: vim.sh
@@ -77,13 +78,13 @@ Patch3017: vim-python3-tests.patch
 Patch3018: vim-crypto-warning.patch
 
 %if %{with python3}
-BuildRequires:	pkgconfig(python3)
+BuildRequires: pkgconfig(python3)
 %endif
-BuildRequires:	perl-devel
-BuildRequires:	pkgconfig(ncursesw)
+BuildRequires: perl-devel
+BuildRequires: pkgconfig(ncursesw)
 BuildRequires:  perl(ExtUtils::Embed) perl(ExtUtils::ParseXS)
 BuildRequires:  gpm-devel autoconf file
-BuildRequires:	pkgconfig(libacl)
+BuildRequires: pkgconfig(libacl)
 %if %{WITH_SELINUX}
 BuildRequires: selinux-devel
 %endif
@@ -104,7 +105,6 @@ Conflicts: filesystem < 3
 # vim bundles libvterm, which is used during build - so we need to provide
 # bundled libvterm for catching possible libvterm CVEs
 Provides: bundled(libvterm)
-
 
 %description
 VIM (VIsual editor iMproved) is an updated and improved version of the
@@ -197,12 +197,12 @@ packages that add vim files, p.e.  additional syntax files or filetypes.
 %package X11
 Summary: The VIM version of the vi editor for the X Window System - GVim
 # needed in configure script to have correct macros enabled for GUI (#1603272)
-BuildRequires:	pkgconfig(gtk+-3.0)
-BuildRequires:	pkgconfig(xt)
-BuildRequires:	pkgconfig(xpm)
-BuildRequires:	pkgconfig(ice)
-BuildRequires:	pkgconfig(sm)
-BuildRequires:	appstream-util
+BuildRequires: pkgconfig(gtk+-3.0)
+BuildRequires: pkgconfig(xt)
+BuildRequires: pkgconfig(xpm)
+BuildRequires: pkgconfig(ice)
+BuildRequires: pkgconfig(sm)
+BuildRequires: appstream-util
 
 Requires: vim-common = %{epoch}:%{version}-%{release}
 Requires: %{_lib}gtk3_0
@@ -439,8 +439,8 @@ install -p -m644 %{SOURCE10} \
 #
 # See http://www.freedesktop.org/software/appstream/docs/ for more details.
 #
-mkdir -p $RPM_BUILD_ROOT%{_datadir}/metainfo
-cat > $RPM_BUILD_ROOT%{_datadir}/metainfo/gvim.appdata.xml <<EOF
+mkdir -p %{buildroot}%{_datadir}/metainfo
+cat > %{buildroot}%{_datadir}/metainfo/gvim.appdata.xml <<EOF
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Copyright 2014 Richard Hughes <richard@hughsie.com> -->
 <!--
