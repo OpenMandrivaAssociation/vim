@@ -1,8 +1,7 @@
-diff --git a/src/config.h.in b/src/config.h.in
-index fbf4b24..0800db2 100644
---- a/src/config.h.in
-+++ b/src/config.h.in
-@@ -498,5 +498,14 @@
+diff -up vim-8.2.3253/src/config.h.in.3018~ vim-8.2.3253/src/config.h.in
+--- vim-8.2.3253/src/config.h.in.3018~	2021-07-30 21:56:10.000000000 +0200
++++ vim-8.2.3253/src/config.h.in	2021-07-31 02:48:54.596077739 +0200
+@@ -499,5 +499,14 @@
  /* Define to inline symbol or empty */
  #undef inline
  
@@ -17,10 +16,9 @@ index fbf4b24..0800db2 100644
 +
  /* Define if _SC_SIGSTKSZ is available via sysconf() */
  #undef HAVE_SYSCONF_SIGSTKSZ
-diff --git a/src/configure.ac b/src/configure.ac
-index bf7d0c4..db99148 100644
---- a/src/configure.ac
-+++ b/src/configure.ac
+diff -up vim-8.2.3253/src/configure.ac.3018~ vim-8.2.3253/src/configure.ac
+--- vim-8.2.3253/src/configure.ac.3018~	2021-07-31 02:48:54.593077718 +0200
++++ vim-8.2.3253/src/configure.ac	2021-07-31 02:48:54.597077745 +0200
 @@ -541,6 +541,38 @@ else
    AC_MSG_RESULT(yes)
  fi
@@ -60,11 +58,10 @@ index bf7d0c4..db99148 100644
  dnl Check for Lua feature.
  AC_MSG_CHECKING(--enable-luainterp argument)
  AC_ARG_ENABLE(luainterp,
-diff --git a/src/crypt.c b/src/crypt.c
-index 0164f1c..8e2825e 100644
---- a/src/crypt.c
-+++ b/src/crypt.c
-@@ -523,6 +523,21 @@ crypt_check_method(int method)
+diff -up vim-8.2.3253/src/crypt.c.3018~ vim-8.2.3253/src/crypt.c
+--- vim-8.2.3253/src/crypt.c.3018~	2021-07-31 02:48:54.597077745 +0200
++++ vim-8.2.3253/src/crypt.c	2021-07-31 02:49:17.462231476 +0200
+@@ -601,6 +601,21 @@ crypt_check_method(int method)
  	msg_scroll = TRUE;
  	msg(_("Warning: Using a weak encryption method; see :help 'cm'"));
      }
@@ -85,4 +82,4 @@ index 0164f1c..8e2825e 100644
 +#endif
  }
  
-     void
+ #ifdef FEAT_SODIUM

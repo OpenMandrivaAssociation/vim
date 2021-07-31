@@ -24,8 +24,8 @@
 Summary: The VIM editor
 URL: http://www.vim.org/
 Name: vim
-Version: 8.2.2632
-Release: 2
+Version: 8.2.3253
+Release: 1
 License: Vim and MIT
 Source0: https://github.com/vim/vim/archive/v%{version}.tar.gz
 Source1: vim.sh
@@ -272,7 +272,7 @@ perl -pi -e "s,bin/nawk,bin/awk,g" runtime/tools/mve.awk
 %patch3014 -p1
 %patch3016 -p1 -b .copypaste
 %patch3017 -p1
-%patch3018 -p1
+%patch3018 -p1 -b .3018~
 
 %build
 cd src
