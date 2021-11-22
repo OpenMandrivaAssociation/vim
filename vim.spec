@@ -24,8 +24,8 @@
 Summary: The VIM editor
 URL: http://www.vim.org/
 Name: vim
-Version: 8.2.3336
-Release: 1
+Version:	8.2.3640
+Release:	1
 License: Vim and MIT
 Source0: https://github.com/vim/vim/archive/v%{version}.tar.gz
 Source1: vim.sh
@@ -63,7 +63,6 @@ Patch2011: vim-7.0-hunspell.patch
 BuildRequires: hunspell-devel
 %endif
 
-Patch3000: vim-7.4-syntax.patch
 Patch3002: vim-7.4-nowarnings.patch
 Patch3004: vim-7.0-rclocation.patch
 Patch3007: vim-7.4-fstabsyntax.patch
@@ -262,7 +261,6 @@ perl -pi -e "s,bin/nawk,bin/awk,g" runtime/tools/mve.awk
 %{__tar} xjf %{SOURCE13}
 %endif
 
-%patch3000 -p1
 %patch3002 -p1
 %patch3004 -p1
 %patch3007 -p1 -b .fstabsyntax
@@ -595,7 +593,6 @@ touch %{buildroot}/%{_datadir}/%{name}/vimfiles/doc/tags
 %dir %{_datadir}/%{name}
 %{_datadir}/%{name}/vimfiles/template.spec
 %dir %{_datadir}/%{name}/%{vimdir}
-%{_datadir}/%{name}/%{vimdir}/rgb.txt
 %{_datadir}/%{name}/%{vimdir}/autoload
 %{_datadir}/%{name}/%{vimdir}/colors
 %{_datadir}/%{name}/%{vimdir}/compiler
