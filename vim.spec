@@ -1,15 +1,9 @@
 # (tpg) do not enable it, as it is useless here
-%if %{?WITH_SELINUX:0}%{!?WITH_SELINUX:1}
-%define WITH_SELINUX 0
-%endif
-%define desktop_file 1
-
-%define withnetbeans 1
-
-%define withvimspell 0
-%define withhunspell 0
-%define withruby 1
-%define withlua 1
+%bcond_with selinux
+%bcond_without netbeans
+%bcond_with vimspell
+%bcond_without ruby
+%bcond_without lua
 
 %define baseversion 8.2
 %define vimdir vim82
@@ -25,22 +19,17 @@ Summary: The VIM editor
 URL: http://www.vim.org/
 Name: vim
 Version:	8.2.4071
-Release:	1
+Release:	2
 License: Vim and MIT
 Source0: https://github.com/vim/vim/archive/v%{version}.tar.gz
-Source1: vim.sh
-Source2: vim.csh
-Source4: virc
 Source5: vimrc
 Source7: gvim16.png
 Source8: gvim32.png
 Source9: gvim48.png
 Source10: gvim64.png
-%if %{withvimspell}
+%if %{with vimspell}
 Source13: vim-spell-files.tar.bz2
 %endif
-Source14: spec-template.new
-Source15: macros.vim
 # C++11/C++14/C++17 syntax highlighting, Version 0.931 from
 # https://www.vim.org/scripts/script.php?script_id=4293
 Source20: https://raw.githubusercontent.com/Mizuchi/STL-Syntax/master/after/syntax/cpp/stl.vim
@@ -58,10 +47,6 @@ Patch1001: xxd-locale.patch
 
 Patch2002: vim-7.0-fixkeys.patch
 Patch2003: vim-7.4-specsyntax.patch
-%if %{withhunspell}
-Patch2011: vim-7.0-hunspell.patch
-BuildRequires: hunspell-devel
-%endif
 
 Patch3002: vim-7.4-nowarnings.patch
 Patch3004: vim-7.0-rclocation.patch
@@ -71,8 +56,6 @@ Patch3010: vim-7.3-manpage-typo-668894-675480.patch
 Patch3011: vim-manpagefixes-948566.patch
 Patch3014: vim-7.4-releasestring-1318991.patch
 Patch3016: vim-8.0-copy-paste.patch
-# migrate shebangs in script to /usr/bin/python3 and use python2 when necessary
-Patch3017: vim-python3-tests.patch
 # fips warning
 Patch3018: vim-crypto-warning.patch
 
@@ -84,26 +67,33 @@ BuildRequires: pkgconfig(ncursesw)
 BuildRequires:  perl(ExtUtils::Embed) perl(ExtUtils::ParseXS)
 BuildRequires:  gpm-devel autoconf file
 BuildRequires: pkgconfig(libacl)
-%if %{WITH_SELINUX}
+%if %{with selinux}
 BuildRequires: selinux-devel
 %endif
-%if "%{withruby}" == "1"
+%if %{with ruby}
 BuildRequires: ruby-devel ruby
 %endif
-%if "%{withlua}" == "1"
+%if %{with lua}
 BuildRequires: lua-devel
 %endif
-%if %{desktop_file}
-# for /usr/bin/desktop-file-install
-Requires: desktop-file-utils
-BuildRequires: desktop-file-utils
-%endif
 Epoch: 2
+# for /usr/bin/desktop-file-install
+BuildRequires: desktop-file-utils
 Conflicts: filesystem < 3
 
 # vim bundles libvterm, which is used during build - so we need to provide
 # bundled libvterm for catching possible libvterm CVEs
 Provides: bundled(libvterm)
+
+Provides: vi
+Requires: vim-common = %{EVRD}
+Provides: %{_bindir}/mergetool
+Provides: %{_bindir}/vi
+Provides: %{_bindir}/vim
+
+%rename %{name}-common
+%rename %{name}-minimal
+%rename %{name}-enhanced
 
 %description
 VIM (VIsual editor iMproved) is an updated and improved version of the
@@ -111,86 +101,13 @@ vi editor.  Vi was the first real screen-based editor for UNIX, and is
 still very popular.  VIM improves on vi by adding new features:
 multiple windows, multi-level undo, block highlighting and more.
 
-%package common
-Summary: The common files needed by any version of the VIM editor
-Conflicts: man-pages-fr < 0.9.7-14
-Conflicts: man-pages-it < 0.3.0-17
-Conflicts: man-pages-pl < 0.24-2
-Requires: %{name}-filesystem
-Conflicts: %{name}-minimal < %{epoch}:8.1.1-1
-
-%description common
-VIM (VIsual editor iMproved) is an updated and improved version of the
-vi editor.  Vi was the first real screen-based editor for UNIX, and is
-still very popular.  VIM improves on vi by adding new features:
-multiple windows, multi-level undo, block highlighting and more.  The
-vim-common package contains files which every VIM binary will need in
-order to run.
-
-If you are installing vim-enhanced or vim-X11, you'll also need
-to install the vim-common package.
-
 %package spell
 Summary: The dictionaries for spell checking. This package is optional
-Requires: vim-common = %{epoch}:%{version}-%{release}
+Requires: vim-common = %{EVRD}
 
 %description spell
 This subpackage contains dictionaries for vim spell checking in
 many different languages.
-
-%package minimal
-Summary: A minimal version of the VIM editor
-Provides: vi
-Provides: %{_bindir}/vi
-# conflicts in package because of manpage move (bug #1599663)
-Conflicts: %{name}-common < %{epoch}:8.1.1-1
-
-%description minimal
-VIM (VIsual editor iMproved) is an updated and improved version of the
-vi editor.  Vi was the first real screen-based editor for UNIX, and is
-still very popular.  VIM improves on vi by adding new features:
-multiple windows, multi-level undo, block highlighting and more. The
-vim-minimal package includes a minimal version of VIM, providing
-the commands vi, view, ex, rvi, and rview. NOTE: The online help is
-only available when the vim-common package is installed.
-
-%package enhanced
-Summary: A version of the VIM editor which includes recent enhancements
-Requires: vim-common = %{epoch}:%{version}-%{release} which
-Provides: vim
-Provides: %{_bindir}/mergetool
-Provides: %{_bindir}/vim
-# suggest python3, python2, lua, ruby and perl packages because of their
-# embedded functionality in Vim/GVim
-Suggests: python3
-Suggests: perl(:MODULE_COMPAT_%(eval "`%{__perl} -V:version`"; echo $version)) perl-devel
-%if "%{withruby}" == "1"
-Suggests: ruby-libs ruby
-%endif
-%if "%{withlua}" == "1"
-Suggests: lua-libs
-%endif
-
-%description enhanced
-VIM (VIsual editor iMproved) is an updated and improved version of the
-vi editor.  Vi was the first real screen-based editor for UNIX, and is
-still very popular.  VIM improves on vi by adding new features:
-multiple windows, multi-level undo, block highlighting and more.  The
-vim-enhanced package contains a version of VIM with extra, recently
-introduced features like Python and Perl interpreters.
-
-Install the vim-enhanced package if you'd like to use a version of the
-VIM editor which includes recently added enhancements like
-interpreters for the Python and Perl scripting languages.  You'll also
-need to install the vim-common package.
-
-%package filesystem
-Summary: VIM filesystem layout
-BuildArch: noarch
-
-%Description filesystem
-This package provides some directories which are required by other
-packages that add vim files, p.e.  additional syntax files or filetypes.
 
 %if %{with gui}
 %package X11
@@ -203,7 +120,7 @@ BuildRequires: pkgconfig(ice)
 BuildRequires: pkgconfig(sm)
 BuildRequires: appstream-util
 
-Requires: vim-common = %{epoch}:%{version}-%{release}
+Requires: %{name} = %{EVRD}
 Requires: %{_lib}gtk3_0
 Provides: gvim
 Provides: %{_bindir}/mergetool
@@ -213,10 +130,10 @@ Requires: hicolor-icon-theme
 # embedded functionality in Vim/GVim
 Suggests: python3
 Suggests: perl(:MODULE_COMPAT_%(eval "`%{__perl} -V:version`"; echo $version)) perl-devel
-%if "%{withruby}" == "1"
+%if %{with ruby}
 Suggests: ruby-libs ruby
 %endif
-%if "%{withlua}" == "1"
+%if %{with lua}
 Suggests: lua
 %endif
 
@@ -234,202 +151,111 @@ with graphics and mouse capabilities.  You'll also need to install the
 vim-common package.
 %endif
 
+%package tutor
+Summary:	Tutor teaching the use of the VIM editor
+Requires:	%{name} = %{EVRD}
+
+%description tutor
+Tutor teaching the use of the VIM editor
+
+%package X11-tutor
+Summary:	Tutor teaching the use of the gVIM editor
+Requires:	%{name}-X11 = %{EVRD}
+Requires:	%{name}-tutor = %{EVRD}
+
+%description X11-tutor
+Tutor teaching the use of the gVIM editor
+
 %prep
-%setup -q -b 0
+%autosetup -p1
 
 # Additional syntax highlighting support
 mkdir runtime/syntax/cpp
 cp %{S:20} runtime/syntax/cpp/
 cp %{S:21} %{S:22} %{S:23} %{S:24} runtime/syntax/
 
-# use %%{__python3} macro for defining shebangs in python3 tests
-sed -i -e 's,/usr/bin/python3,%{__python3},' %{PATCH3017}
-
-%patch1000 -p1 -b .qt~
-
 # fix rogue dependencies from sample code
 chmod -x runtime/tools/mve.awk
-%patch2002 -p1 -b .fixkeys
-%patch2003 -p1
-%if %{withhunspell}
-%patch2011 -p1
-%endif
-perl -pi -e "s,bin/nawk,bin/awk,g" runtime/tools/mve.awk
+sed -i -e "s,bin/nawk,bin/awk,g" runtime/tools/mve.awk
 
 # install spell files
-%if %{withvimspell}
+%if %{with vimspell}
 %{__tar} xjf %{SOURCE13}
 %endif
 
-%patch3002 -p1
-%patch3004 -p1
-%patch3007 -p1 -b .fstabsyntax
-%patch3008 -p1 -b .syncolor
-%patch3010 -p1
-%patch3011 -p1
-%patch3014 -p1
-%patch3016 -p1 -b .copypaste
-%patch3017 -p1
-%patch3018 -p1 -b .3018~
-
-%build
 cd src
 autoconf
 
-sed -e "s+VIMRCLOC	= \$(VIMLOC)+VIMRCLOC	= /etc+" Makefile > Makefile.tmp
-mv -f Makefile.tmp Makefile
-
+%build
 export CFLAGS="%{optflags} -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -D_FORTIFY_SOURCE=2"
 export CXXFLAGS="%{optflags} -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -D_FORTIFY_SOURCE=2"
 
-cp -f os_unix.h os_unix.h.save
-cp -f ex_cmds.c ex_cmds.c.save
+%define common_options \\\
+	--with-features=huge \\\
+	--enable-python3interp=dynamic \\\
+	--enable-perlinterp=dynamic \\\
+	--disable-tclinterp \\\
+	--enable-multibyte \\\
+	--with-tlib=ncursesw \\\
+	--enable-fips-warning \\\
+	--with-compiledby="<bugzilla@openmandriva.org>" \\\
+	--with-modified-by="<bugzilla@openmandriva.org>" \\\
+	--enable-cscope \\\
+	--%{?with_selinux:en}%{!?with_selinux:dis}able-selinux \\\
+	--%{?with_netbeans:en}%{!?with_netbeans:dis}able-netbeans \\\
+	--%{?with_ruby:en}%{!?with_ruby:dis}able-ruby%{?with_ruby:=dynamic} \\\
+	--%{?with_lua:en}%{!?with_lua:dis}able-lua%{?with_lua:=dynamic} \\\
+	--enable-fail-if-missing
 
-# Configure options:
-# --enable-fail-if-missing - we need to fail if configure options aren't satisfied
-# --with-features - for setting how big amount of features is enabled
-# --enable-multibyte - enabling multibyte editing support - for editing files in languages, which one character
-#                      cannot be represented by one byte - Asian languages, Unicode
-# --disable-netbeans - disabling socket interface for integrating Vim into NetBeans IDE
-# --enable-selinux - enabling selinux support
-# --enable-Ninterp - enabling internal interpreter
-# --with-x - yes if we want X11 support (graphical Vim for X11)
-# --with-tlib - which terminal library to use
-# --disable-gpm - disabling support for General Purpose Mouse - Linux mouse daemon
-
-perl -pi -e "s/vimrc/virc/"  os_unix.h
-%configure --prefix=%{_prefix} --with-features=small --with-x=no \
-  --enable-multibyte \
-  --disable-netbeans \
-%if %{WITH_SELINUX}
-  --enable-selinux \
-%else
-  --disable-selinux \
-%endif
-  --disable-pythoninterp --disable-perlinterp --disable-tclinterp \
-  --with-tlib=ncurses --enable-gui=no --disable-gpm --exec-prefix=/ \
-  --with-compiledby="<bugzilla@redhat.com>" \
-  --with-modified-by="<bugzilla@redhat.com>" \
-  --enable-fips-warning \
-  --enable-fail-if-missing
-
-make VIMRCLOC=/etc VIMRUNTIMEDIR=/usr/share/vim/%{vimdir} %{?_smp_mflags}
-cp vim minimal-vim
-make clean
-
-mv -f os_unix.h.save os_unix.h
-mv -f ex_cmds.c.save ex_cmds.c
-
-export LDFLAGS="%{build_ldflags} $(python3-config --libs --embed)"
-
-# More configure options:
-# --enable-xim - enabling X Input Method - international input module for X,
-#                it is for multibyte languages in Vim with X
-# --enable-termtruecolor - use terminal with true colors
 %if %{with gui}
-%configure --with-features=huge \
-  --enable-python3interp=dynamic \
-  --enable-perlinterp=dynamic \
-  --disable-tclinterp --with-x=yes \
-  --enable-xim --enable-multibyte \
-  --with-tlib=ncurses \
-  --enable-gtk3-check --enable-gui=gtk3 \
-  --enable-fips-warning \
-  --with-compiledby="<bugzilla@openmandriva.org>" --enable-cscope \
-  --with-modified-by="<bugzilla@openmandriva.org>" \
-%if "%{withnetbeans}" == "1"
-  --enable-netbeans \
-%else
-  --disable-netbeans \
-%endif
-%if %{WITH_SELINUX}
-  --enable-selinux \
-%else
-  --disable-selinux \
-%endif
-%if "%{withruby}" == "1"
-  --enable-rubyinterp=dynamic \
-%else
-  --disable-rubyinterp \
-%endif
-%if "%{withlua}" == "1"
-  --enable-luainterp=dynamic \
-%else
-  --disable-luainterp \
-%endif
-  --enable-fail-if-missing
+%configure \
+	%common_options \
+	--with-x=yes \
+	--enable-gtk3-check --enable-gui=gtk3 \
+	--enable-xim
 
-make VIMRCLOC=/etc VIMRUNTIMEDIR=/usr/share/vim/%{vimdir} %{?_smp_mflags}
-cp vim gvim
-make clean
+%make_build VIMRCLOC=/etc VIMRUNTIMEDIR=/usr/share/vim/%{vimdir}
+# Unfortunately, out-of-tree builds aren't supported, so we have to do
+# install to an alternate DESTDIR instead of doing %%make_install twice
+# in the %%install section
+make install DESTDIR="`pwd`/binaries-gui" VIMRCLOC=/etc STRIP=/bin/true
+%make_build clean
+# Tweak symlinks so we don't conflict with the text-only version
+cd binaries-gui%{_bindir}
+rm gvim
+mv vim gvim
+for i in *; do
+	if [ -h $i ]; then
+		rm $i
+		ln -s gvim $i
+	fi
+done
+cd -
 %endif
 
-%configure --prefix=%{_prefix} --with-features=huge \
- --enable-python3interp=dynamic \
- --enable-perlinterp=dynamic \
- --disable-tclinterp \
- --with-x=no \
- --enable-gui=no --exec-prefix=%{_prefix} --enable-multibyte \
- --enable-cscope --with-modified-by="<bugzilla@openmandriva.org>" \
- --with-tlib=ncurses \
- --enable-fips-warning \
- --with-compiledby="<bugzilla@openmandriva.org>" \
-%if "%{withnetbeans}" == "1"
-  --enable-netbeans \
-%else
-  --disable-netbeans \
-%endif
-%if %{WITH_SELINUX}
-  --enable-selinux \
-%else
-  --disable-selinux \
-%endif
-%if "%{withruby}" == "1"
-  --enable-rubyinterp=dynamic \
-%else
-  --disable-rubyinterp \
-%endif
-%if "%{withlua}" == "1"
-  --enable-luainterp=dynamic \
-%else
-  --disable-luainterp \
-%endif
-  --enable-fail-if-missing
+%configure \
+	%common_options \
+	--with-x=no --enable-gui=no
 
-make VIMRCLOC=/etc VIMRUNTIMEDIR=/usr/share/vim/%{vimdir} %{?_smp_mflags}
-cp vim enhanced-vim
+%make_build VIMRCLOC=/etc VIMRUNTIMEDIR=/usr/share/vim/%{vimdir}
 
 %install
-mkdir -p %{buildroot}/%{_bindir}
-mkdir -p %{buildroot}/%{_datadir}/%{name}/vimfiles/{after,autoload,colors,compiler,doc,ftdetect,ftplugin,indent,keymap,lang,plugin,print,spell,syntax,tutor}
-mkdir -p %{buildroot}/%{_datadir}/%{name}/vimfiles/after/{autoload,colors,compiler,doc,ftdetect,ftplugin,indent,keymap,lang,plugin,print,spell,syntax,tutor}
-cp -f %{SOURCE14} %{buildroot}/%{_datadir}/%{name}/vimfiles/template.spec
-cp runtime/doc/uganda.txt LICENSE
-# Those aren't Linux info files but some binary files for Amiga:
-rm -f README*.info
+%make_install BINDIR=%{_bindir} VIMRCLOC=/etc VIMRUNTIMEDIR=/usr/share/vim/%{vimdir} STRIP=/bin/true
+find binaries-gui |while read r; do
+	[ -e %{buildroot}${r:12} ] || cp -a $r %{buildroot}${r:12}
+done
 
-
-cd src
-# Adding STRIP=/bin/true, because Vim wants to strip the binaries by himself
-# and put the stripped files into correct dirs. Build system (koji/brew)
-# does it for us, so there is no need to do it in Vim
-make install DESTDIR=%{buildroot} BINDIR=%{_bindir} VIMRCLOC=/etc VIMRUNTIMEDIR=/usr/share/vim/%{vimdir} STRIP=/bin/true
-make installgtutorbin  DESTDIR=%{buildroot} BINDIR=%{_bindir} VIMRCLOC=/etc VIMRUNTIMEDIR=/usr/share/vim/%{vimdir}
 mkdir -p %{buildroot}%{_datadir}/icons/hicolor/{16x16,32x32,48x48,64x64}/apps
-install -m755 minimal-vim %{buildroot}%{_bindir}/vi
-install -m755 enhanced-vim %{buildroot}%{_bindir}/vim
-install -m755 gvim %{buildroot}%{_bindir}/gvim
 install -p -m644 %{SOURCE7} \
-   %{buildroot}%{_datadir}/icons/hicolor/16x16/apps/gvim.png
+	%{buildroot}%{_datadir}/icons/hicolor/16x16/apps/gvim.png
 install -p -m644 %{SOURCE8} \
-   %{buildroot}%{_datadir}/icons/hicolor/32x32/apps/gvim.png
+	%{buildroot}%{_datadir}/icons/hicolor/32x32/apps/gvim.png
 install -p -m644 %{SOURCE9} \
-   %{buildroot}%{_datadir}/icons/hicolor/48x48/apps/gvim.png
+	%{buildroot}%{_datadir}/icons/hicolor/48x48/apps/gvim.png
 install -p -m644 %{SOURCE10} \
-   %{buildroot}%{_datadir}/icons/hicolor/64x64/apps/gvim.png
-#cp -f %{SOURCE17} %{buildroot}/%{_datadir}/%{name}/%{vimdir}/ftplugin/spec.vim
-#cp -f %{SOURCE18} %{buildroot}/%{_datadir}/%{name}/%{vimdir}/syntax/spec.vim
+	%{buildroot}%{_datadir}/icons/hicolor/64x64/apps/gvim.png
 
+%if %{with gui}
 # Register as an application to be visible in the software center
 #
 # NOTE: It would be *awesome* if this file was maintained by the upstream
@@ -473,332 +299,85 @@ SentUpstream: 2014-05-22
 </application>
 EOF
 
-( cd %{buildroot}
-  ln -sf vi ./%{_bindir}/rvi
-  ln -sf vi ./%{_bindir}/rview
-  ln -sf vi ./%{_bindir}/view
-  ln -sf vi ./%{_bindir}/ex
-  ln -sf vim ./%{_bindir}/rvim
-  ln -sf vim ./%{_bindir}/vimdiff
-  perl -pi -e "s,%{buildroot},," .%{_mandir}/man1/vim.1 .%{_mandir}/man1/vimtutor.1
-  rm -f .%{_mandir}/man1/rvim.1
-  cp -p .%{_mandir}/man1/vim.1 .%{_mandir}/man1/vi.1
-  ln -sf vi.1.gz .%{_mandir}/man1/rvi.1.gz
-  ln -sf vim.1.gz .%{_mandir}/man1/vimdiff.1.gz
-  ln -sf gvim ./%{_bindir}/gview
-  ln -sf gvim ./%{_bindir}/gex
-  ln -sf gvim ./%{_bindir}/evim
-  ln -sf gvim ./%{_bindir}/gvimdiff
-  ln -sf gvim ./%{_bindir}/vimx
-  %if "%{desktop_file}" == "1"
-    desktop-file-install \
-        --dir %{buildroot}/%{_datadir}/applications \
-        %{buildroot}/%{_datadir}/applications/gvim.desktop
-        # --add-category "Development;TextEditor;X-Red-Hat-Base" D\
-  %else
-    mkdir -p ./%{_sysconfdir}/X11/applnk/Applications
-    cp %{buildroot}/%{_datadir}/applications/gvim.desktop ./%{_sysconfdir}/X11/applnk/Applications/gvim.desktop
-  %endif
-  # ja_JP.ujis is obsolete, ja_JP.eucJP is recommended.
-  ( cd ./%{_datadir}/%{name}/%{vimdir}/lang; \
-    ln -sf menu_ja_jp.ujis.vim menu_ja_jp.eucjp.vim )
-)
-%if %{with gui}
 appstream-util validate-relax --nonet %{buildroot}/%{_datadir}/metainfo/*.appdata.xml
 %endif
 
-pushd %{buildroot}/%{_datadir}/%{name}/%{vimdir}/tutor
-mkdir conv
-   iconv -f CP1252 -t UTF8 tutor.ca > conv/tutor.ca
-   iconv -f CP1252 -t UTF8 tutor.it > conv/tutor.it
-   #iconv -f CP1253 -t UTF8 tutor.gr > conv/tutor.gr
-   iconv -f CP1252 -t UTF8 tutor.fr > conv/tutor.fr
-   iconv -f CP1252 -t UTF8 tutor.es > conv/tutor.es
-   iconv -f CP1252 -t UTF8 tutor.de > conv/tutor.de
-   #iconv -f CP737 -t UTF8 tutor.gr.cp737 > conv/tutor.gr.cp737
-   #iconv -f EUC-JP -t UTF8 tutor.ja.euc > conv/tutor.ja.euc
-   #iconv -f SJIS -t UTF8 tutor.ja.sjis > conv/tutor.ja.sjis
-   iconv -f UTF8 -t UTF8 tutor.ja.utf-8 > conv/tutor.ja.utf-8
-   iconv -f UTF8 -t UTF8 tutor.ko.utf-8 > conv/tutor.ko.utf-8
-   iconv -f CP1252 -t UTF8 tutor.no > conv/tutor.no
-   iconv -f ISO-8859-2 -t UTF8 tutor.pl > conv/tutor.pl
-   iconv -f ISO-8859-2 -t UTF8 tutor.sk > conv/tutor.sk
-   iconv -f KOI8R -t UTF8 tutor.ru > conv/tutor.ru
-   iconv -f CP1252 -t UTF8 tutor.sv > conv/tutor.sv
-   mv -f tutor.ja.euc tutor.ja.sjis tutor.ko.euc tutor.pl.cp1250 tutor.zh.big5 tutor.ru.cp1251 tutor.zh.euc tutor.sr.cp1250 tutor.sr.utf-8 conv/
-   rm -f tutor.ca tutor.de tutor.es tutor.fr tutor.gr tutor.it tutor.ja.utf-8 tutor.ko.utf-8 tutor.no tutor.pl tutor.sk tutor.ru tutor.sv
-mv -f conv/* .
-rmdir conv
-popd
-
 # Dependency cleanups
 chmod 644 %{buildroot}/%{_datadir}/%{name}/%{vimdir}/doc/vim2html.pl \
- %{buildroot}/%{_datadir}/%{name}/%{vimdir}/tools/*.pl \
- %{buildroot}/%{_datadir}/%{name}/%{vimdir}/tools/vim132
-chmod 644 ../runtime/doc/vim2html.pl
+	%{buildroot}/%{_datadir}/%{name}/%{vimdir}/tools/*.pl \
+	%{buildroot}/%{_datadir}/%{name}/%{vimdir}/tools/vim132
+chmod 644 runtime/doc/vim2html.pl
 
-mkdir -p %{buildroot}/%{_sysconfdir}/profile.d
-cp %{SOURCE1} %{buildroot}/%{_sysconfdir}/profile.d/vim.sh
-cp %{SOURCE2} %{buildroot}/%{_sysconfdir}/profile.d/vim.csh
-chmod 0644 %{buildroot}/%{_sysconfdir}/profile.d/vim.*
-install -p -m644 %{SOURCE4} %{buildroot}/%{_sysconfdir}/virc
-install -p -m644 %{SOURCE5} %{buildroot}/%{_sysconfdir}/vimrc
+mkdir -p %{buildroot}%{_sysconfdir}
+install -p -m644 %{SOURCE5} %{buildroot}%{_sysconfdir}/vimrc
 
-mkdir -p %{buildroot}%{_rpmconfigdir}/macros.d/
-install -p -m644 %{SOURCE15} %{buildroot}%{_rpmconfigdir}/macros.d/
-
-(cd ../runtime; rm -rf doc; ln -svf ../../vim/%{vimdir}/doc docs;)
-rm -f %{buildroot}/%{_datadir}/vim/%{vimdir}/macros/maze/maze*.c
-rm -rf %{buildroot}/%{_datadir}/vim/%{vimdir}/tools
-rm -rf %{buildroot}/%{_datadir}/vim/%{vimdir}/doc/vim2html.pl
-rm -f %{buildroot}/%{_datadir}/vim/%{vimdir}/tutor/tutor.gr.utf-8~
-
-# Remove not UTF-8 manpages
-for i in pl.ISO8859-2 it.ISO8859-1 ru.KOI8-R fr.ISO8859-1 da.ISO8859-1 de.ISO8859-1; do
-  rm -rf %{buildroot}/%{_mandir}/$i
+# Remove non-UTF-8 manpages
+for i in pl.ISO8859-2 it.ISO8859-1 ru.KOI8-R fr.ISO8859-1 da.ISO8859-1 de.ISO8859-1 tr.ISO8859-9; do
+	rm -rf %{buildroot}/%{_mandir}/$i
 done
 
 # use common man1/ru directory
 mv %{buildroot}/%{_mandir}/ru.UTF-8 %{buildroot}/%{_mandir}/ru
 
 # Remove duplicate man pages
-for i in fr.UTF-8 it.UTF-8 pl.UTF-8 da.UTF-8 de.UTF-8; do
-  rm -rf %{buildroot}/%{_mandir}/$i
+for i in fr.UTF-8 it.UTF-8 pl.UTF-8 da.UTF-8 de.UTF-8 tr.UTF-8; do
+	rm -rf %{buildroot}/%{_mandir}/$i
 done
 
-for i in rvim.1 gvim.1 gex.1 gview.1 vimx.1; do
-  echo ".so man1/vim.1" > %{buildroot}/%{_mandir}/man1/$i
-done
-echo ".so man1/vimdiff.1" > %{buildroot}/%{_mandir}/man1/gvimdiff.1
-echo ".so man1/vimtutor.1" > %{buildroot}/%{_mandir}/man1/gvimtutor.1
 mkdir -p %{buildroot}/%{_mandir}/man5
 echo ".so man1/vim.1" > %{buildroot}/%{_mandir}/man5/vimrc.5
-echo ".so man1/vi.1" > %{buildroot}/%{_mandir}/man5/virc.5
-touch %{buildroot}/%{_datadir}/%{name}/vimfiles/doc/tags
 
-# Refresh documentation helptags
-%transfiletriggerin common -- %{_datadir}/%{name}/vimfiles/doc
-%{_bindir}/vim -c ":helptags %{_datadir}/%{name}/vimfiles/doc" -c :q &> /dev/null || :
+ln -s vim %{buildroot}%{_bindir}/vi
 
-%transfiletriggerpostun common -- %{_datadir}/%{name}/vimfiles/doc
-> %{_datadir}/%{name}/vimfiles/doc/tags || :
-%{_bindir}/vim -c ":helptags %{_datadir}/%{name}/vimfiles/doc" -c :q &> /dev/null || :
+BUILDDIR="$(pwd)"
+cd %{buildroot}%{_mandir}
+for i in man1/* man5/*; do
+	if basename $i |cut -d. -f1 |grep -qE '(g|ev)'; then
+		echo "%{_mandir}/${i}*" >>$BUILDDIR/gvim.mans
+	else
+		echo "%{_mandir}/${i}*" >>$BUILDDIR/vim.mans
+	fi
+done
+for l in *; do
+	echo $l |grep -q man && continue
+	for i in $l/*/*; do
+		if basename $i |cut -d. -f1 |grep -qE '(g|ev)'; then
+			echo "%lang($l) %{_mandir}/${i}*" >>$BUILDDIR/gvim.mans
+		else
+			echo "%lang($l) %{_mandir}/${i}*" >>$BUILDDIR/vim.mans
+		fi
+	done
+done
 
-%files common
+%files -f vim.mans
 %config(noreplace) %{_sysconfdir}/vimrc
-%{!?_licensedir:%global license %%doc}
-%license LICENSE
-%doc README*
-%doc runtime/docs
-%dir %{_datadir}/%{name}
-%{_datadir}/%{name}/vimfiles/template.spec
-%dir %{_datadir}/%{name}/%{vimdir}
-%{_datadir}/%{name}/%{vimdir}/autoload
-%{_datadir}/%{name}/%{vimdir}/colors
-%{_datadir}/%{name}/%{vimdir}/compiler
-%{_datadir}/%{name}/%{vimdir}/pack
-%{_datadir}/%{name}/%{vimdir}/doc
-%{_datadir}/%{name}/%{vimdir}/*.vim
-%{_datadir}/%{name}/%{vimdir}/ftplugin
-%{_datadir}/%{name}/%{vimdir}/indent
-%{_datadir}/%{name}/%{vimdir}/keymap
-%{_datadir}/%{name}/%{vimdir}/lang/*.vim
-%{_datadir}/%{name}/%{vimdir}/lang/*.txt
-%dir %{_datadir}/%{name}/%{vimdir}/lang
-%{_datadir}/%{name}/%{vimdir}/macros
-%{_datadir}/%{name}/%{vimdir}/plugin
-%{_datadir}/%{name}/%{vimdir}/print
-%{_datadir}/%{name}/%{vimdir}/syntax
-%{_datadir}/%{name}/%{vimdir}/tutor
-%if ! %{withvimspell}
-%{_datadir}/%{name}/%{vimdir}/spell
-%endif
-%lang(af) %{_datadir}/%{name}/%{vimdir}/lang/af
-%lang(ca) %{_datadir}/%{name}/%{vimdir}/lang/ca
-%lang(cs) %{_datadir}/%{name}/%{vimdir}/lang/cs
-%lang(cs.cp1250) %{_datadir}/%{name}/%{vimdir}/lang/cs.cp1250
-%lang(da) %{_datadir}/%{name}/%{vimdir}/lang/da
-%lang(de) %{_datadir}/%{name}/%{vimdir}/lang/de
-%lang(en_GB) %{_datadir}/%{name}/%{vimdir}/lang/en_GB
-%lang(eo) %{_datadir}/%{name}/%{vimdir}/lang/eo
-%lang(es) %{_datadir}/%{name}/%{vimdir}/lang/es
-%lang(fi) %{_datadir}/%{name}/%{vimdir}/lang/fi
-%lang(fr) %{_datadir}/%{name}/%{vimdir}/lang/fr
-%lang(ga) %{_datadir}/%{name}/%{vimdir}/lang/ga
-%lang(it) %{_datadir}/%{name}/%{vimdir}/lang/it
-%lang(ja) %{_datadir}/%{name}/%{vimdir}/lang/ja
-%lang(ja.euc-jp) %{_datadir}/%{name}/%{vimdir}/lang/ja.euc-jp
-%lang(ja.sjis) %{_datadir}/%{name}/%{vimdir}/lang/ja.sjis
-%lang(ko) %{_datadir}/%{name}/%{vimdir}/lang/ko
-%lang(ko) %{_datadir}/%{name}/%{vimdir}/lang/ko.UTF-8
-%lang(lv) %{_datadir}/%{name}/%{vimdir}/lang/lv
-%lang(nb) %{_datadir}/%{name}/%{vimdir}/lang/nb
-%lang(nl) %{_datadir}/%{name}/%{vimdir}/lang/nl
-%lang(no) %{_datadir}/%{name}/%{vimdir}/lang/no
-%lang(pl) %{_datadir}/%{name}/%{vimdir}/lang/pl
-%lang(pl.UTF-8) %{_datadir}/%{name}/%{vimdir}/lang/pl.UTF-8
-%lang(pl.cp1250) %{_datadir}/%{name}/%{vimdir}/lang/pl.cp1250
-%lang(pt_BR) %{_datadir}/%{name}/%{vimdir}/lang/pt_BR
-%lang(ru) %{_datadir}/%{name}/%{vimdir}/lang/ru
-%lang(ru.cp1251) %{_datadir}/%{name}/%{vimdir}/lang/ru.cp1251
-%lang(sk) %{_datadir}/%{name}/%{vimdir}/lang/sk
-%lang(sk.cp1250) %{_datadir}/%{name}/%{vimdir}/lang/sk.cp1250
-%lang(sr) %{_datadir}/%{name}/%{vimdir}/lang/sr
-%lang(sv) %{_datadir}/%{name}/%{vimdir}/lang/sv
-%lang(tr) %{_datadir}/%{name}/%{vimdir}/lang/tr
-%lang(uk) %{_datadir}/%{name}/%{vimdir}/lang/uk
-%lang(uk.cp1251) %{_datadir}/%{name}/%{vimdir}/lang/uk.cp1251
-%lang(vi) %{_datadir}/%{name}/%{vimdir}/lang/vi
-%lang(zh_CN) %{_datadir}/%{name}/%{vimdir}/lang/zh_CN
-%lang(zh_CN.cp936) %{_datadir}/%{name}/%{vimdir}/lang/zh_CN.cp936
-%lang(zh_TW) %{_datadir}/%{name}/%{vimdir}/lang/zh_TW
-%lang(zh_CN.UTF-8) %{_datadir}/%{name}/%{vimdir}/lang/zh_CN.UTF-8
-%lang(zh_TW.UTF-8) %{_datadir}/%{name}/%{vimdir}/lang/zh_TW.UTF-8
-/%{_bindir}/xxd
-%{_mandir}/man1/gex.*
-%{_mandir}/man1/gview.*
-%{_mandir}/man1/gvim*
-%{_mandir}/man1/rvim.*
-%{_mandir}/man1/vim.*
-%{_mandir}/man1/vimdiff.*
-%{_mandir}/man1/vimtutor.*
-%{_mandir}/man1/vimx.*
-%{_mandir}/man1/xxd.*
-%{_mandir}/man5/vimrc.*
-%lang(fr) %{_mandir}/fr/man1/*
-%lang(da) %{_mandir}/da/man1/*
-%lang(de) %{_mandir}/de/man1/*
-%lang(it) %{_mandir}/it/man1/*
-%lang(ja) %{_mandir}/ja/man1/*
-%lang(pl) %{_mandir}/pl/man1/*
-%lang(ru) %{_mandir}/ru/man1/*
-%lang(tr) %{_mandir}/tr*/man1/*
-
-%if %{withvimspell}
-%files spell
-%dir %{_datadir}/%{name}/%{vimdir}/spell
-%{_datadir}/%{name}/vim70/spell/cleanadd.vim
-%lang(af) %{_datadir}/%{name}/%{vimdir}/spell/af.*
-%lang(am) %{_datadir}/%{name}/%{vimdir}/spell/am.*
-%lang(bg) %{_datadir}/%{name}/%{vimdir}/spell/bg.*
-%lang(ca) %{_datadir}/%{name}/%{vimdir}/spell/ca.*
-%lang(cs) %{_datadir}/%{name}/%{vimdir}/spell/cs.*
-%lang(cy) %{_datadir}/%{name}/%{vimdir}/spell/cy.*
-%lang(da) %{_datadir}/%{name}/%{vimdir}/spell/da.*
-%lang(de) %{_datadir}/%{name}/%{vimdir}/spell/de.*
-%lang(el) %{_datadir}/%{name}/%{vimdir}/spell/el.*
-%lang(en) %{_datadir}/%{name}/%{vimdir}/spell/en.*
-%lang(eo) %{_datadir}/%{name}/%{vimdir}/spell/eo.*
-%lang(es) %{_datadir}/%{name}/%{vimdir}/spell/es.*
-%lang(fo) %{_datadir}/%{name}/%{vimdir}/spell/fo.*
-%lang(fr) %{_datadir}/%{name}/%{vimdir}/spell/fr.*
-%lang(ga) %{_datadir}/%{name}/%{vimdir}/spell/ga.*
-%lang(gd) %{_datadir}/%{name}/%{vimdir}/spell/gd.*
-%lang(gl) %{_datadir}/%{name}/%{vimdir}/spell/gl.*
-%lang(he) %{_datadir}/%{name}/%{vimdir}/spell/he.*
-%lang(hr) %{_datadir}/%{name}/%{vimdir}/spell/hr.*
-%lang(hu) %{_datadir}/%{name}/%{vimdir}/spell/hu.*
-%lang(id) %{_datadir}/%{name}/%{vimdir}/spell/id.*
-%lang(it) %{_datadir}/%{name}/%{vimdir}/spell/it.*
-%lang(ku) %{_datadir}/%{name}/%{vimdir}/spell/ku.*
-%lang(la) %{_datadir}/%{name}/%{vimdir}/spell/la.*
-%lang(lt) %{_datadir}/%{name}/%{vimdir}/spell/lt.*
-%lang(lv) %{_datadir}/%{name}/%{vimdir}/spell/lv.*
-%lang(mg) %{_datadir}/%{name}/%{vimdir}/spell/mg.*
-%lang(mi) %{_datadir}/%{name}/%{vimdir}/spell/mi.*
-%lang(ms) %{_datadir}/%{name}/%{vimdir}/spell/ms.*
-%lang(nb) %{_datadir}/%{name}/%{vimdir}/spell/nb.*
-%lang(nl) %{_datadir}/%{name}/%{vimdir}/spell/nl.*
-%lang(nn) %{_datadir}/%{name}/%{vimdir}/spell/nn.*
-%lang(ny) %{_datadir}/%{name}/%{vimdir}/spell/ny.*
-%lang(pl) %{_datadir}/%{name}/%{vimdir}/spell/pl.*
-%lang(pt) %{_datadir}/%{name}/%{vimdir}/spell/pt.*
-%lang(ro) %{_datadir}/%{name}/%{vimdir}/spell/ro.*
-%lang(ru) %{_datadir}/%{name}/%{vimdir}/spell/ru.*
-%lang(rw) %{_datadir}/%{name}/%{vimdir}/spell/rw.*
-%lang(sk) %{_datadir}/%{name}/%{vimdir}/spell/sk.*
-%lang(sl) %{_datadir}/%{name}/%{vimdir}/spell/sl.*
-%lang(sr) %{_datadir}/%{name}/%{vimdir}/spell/sr.*
-%lang(sv) %{_datadir}/%{name}/%{vimdir}/spell/sv.*
-%lang(sw) %{_datadir}/%{name}/%{vimdir}/spell/sw.*
-%lang(tet) %{_datadir}/%{name}/%{vimdir}/spell/tet.*
-%lang(th) %{_datadir}/%{name}/%{vimdir}/spell/th.*
-%lang(tl) %{_datadir}/%{name}/%{vimdir}/spell/tl.*
-%lang(tn) %{_datadir}/%{name}/%{vimdir}/spell/tn.*
-%lang(uk) %{_datadir}/%{name}/%{vimdir}/spell/uk.*
-%lang(yi) %{_datadir}/%{name}/%{vimdir}/spell/yi.*
-%lang(yi-tr) %{_datadir}/%{name}/%{vimdir}/spell/yi-tr.*
-%lang(zu) %{_datadir}/%{name}/%{vimdir}/spell/zu.*
-%endif
-
-%files minimal
-%config(noreplace) %{_sysconfdir}/virc
 %{_bindir}/ex
+%{_bindir}/rview
+%{_bindir}/rvim
 %{_bindir}/vi
 %{_bindir}/view
-%{_bindir}/rvi
-%{_bindir}/rview
-%{_mandir}/man1/vi.*
-%{_mandir}/man1/ex.*
-%{_mandir}/man1/rvi.*
-%{_mandir}/man1/rview.*
-%{_mandir}/man1/view.*
-%{_mandir}/man5/virc.*
-
-%files enhanced
 %{_bindir}/vim
-%{_bindir}/rvim
 %{_bindir}/vimdiff
-%{_bindir}/vimtutor
-%config(noreplace) %{_sysconfdir}/profile.d/vim.*
+%{_bindir}/xxd
+%{_datadir}/applications/vim.desktop
+%{_datadir}/vim
+%exclude %{_datadir}/vim/%{vimdir}/tutor
 
-%post enhanced
-if ! [ -e %{_bindir}/vi ]; then
-	ln -s vim %{_bindir}/vi
-fi
-
-%postun enhanced
-if [ -L %{_bindir}/vi -a ! -e %{_bindir}/vi ]; then
-	rm %{_bindir}/vi
-fi
-
-%files filesystem
-%{_rpmconfigdir}/macros.d/macros.vim
-%dir %{_datadir}/%{name}/vimfiles
-%dir %{_datadir}/%{name}/vimfiles/after
-%dir %{_datadir}/%{name}/vimfiles/after/*
-%dir %{_datadir}/%{name}/vimfiles/autoload
-%dir %{_datadir}/%{name}/vimfiles/colors
-%dir %{_datadir}/%{name}/vimfiles/compiler
-%dir %{_datadir}/%{name}/vimfiles/doc
-%ghost %{_datadir}/%{name}/vimfiles/doc/tags
-%dir %{_datadir}/%{name}/vimfiles/ftdetect
-%dir %{_datadir}/%{name}/vimfiles/ftplugin
-%dir %{_datadir}/%{name}/vimfiles/indent
-%dir %{_datadir}/%{name}/vimfiles/keymap
-%dir %{_datadir}/%{name}/vimfiles/lang
-%dir %{_datadir}/%{name}/vimfiles/plugin
-%dir %{_datadir}/%{name}/vimfiles/print
-%dir %{_datadir}/%{name}/vimfiles/spell
-%dir %{_datadir}/%{name}/vimfiles/syntax
-%dir %{_datadir}/%{name}/vimfiles/tutor
-
-%files X11
-%if "%{desktop_file}" == "1"
-%{_datadir}/metainfo/*.appdata.xml
-/%{_datadir}/applications/*
-%exclude /%{_datadir}/applications/vim.desktop
-%else
-/%{_sysconfdir}/X11/applnk/*/gvim.desktop
-%endif
-%{_bindir}/gvimtutor
+%files X11 -f gvim.mans
+%{_bindir}/eview
+%{_bindir}/evim
+%{_bindir}/gview
 %{_bindir}/gvim
 %{_bindir}/gvimdiff
-%{_bindir}/gview
-%{_bindir}/gex
+%{_bindir}/rgview
+%{_bindir}/rgvim
+%{_datadir}/applications/gvim.desktop
+%{_datadir}/metainfo/gvim.appdata.xml
+%{_datadir}/icons/*/*/*/*
+
+%files tutor
 %{_bindir}/vimtutor
-%{_bindir}/vimx
-%{_bindir}/evim
-%{_mandir}/man1/evim.*
-%{_datadir}/icons/hicolor/*/apps/*
-%{_datadir}/icons/locolor/*/apps/*
+%{_datadir}/vim/%{vimdir}/tutor
+
+%files X11-tutor
+%{_bindir}/gvimtutor
