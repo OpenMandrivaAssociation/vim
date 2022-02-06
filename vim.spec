@@ -18,7 +18,7 @@
 Summary: The VIM editor
 URL: http://www.vim.org/
 Name: vim
-Version:	8.2.4236
+Version:	8.2.4310
 Release:	1
 License: Vim and MIT
 Source0: https://github.com/vim/vim/archive/v%{version}.tar.gz
@@ -27,6 +27,7 @@ Source7: gvim16.png
 Source8: gvim32.png
 Source9: gvim48.png
 Source10: gvim64.png
+Source11: vim.svg
 %if %{with vimspell}
 Source13: vim-spell-files.tar.bz2
 %endif
@@ -245,7 +246,7 @@ find binaries-gui |while read r; do
 	[ -e %{buildroot}${r:12} ] || cp -a $r %{buildroot}${r:12}
 done
 
-mkdir -p %{buildroot}%{_datadir}/icons/hicolor/{16x16,32x32,48x48,64x64}/apps
+mkdir -p %{buildroot}%{_datadir}/icons/hicolor/{16x16,32x32,48x48,64x64,scalable}/apps
 install -p -m644 %{SOURCE7} \
 	%{buildroot}%{_datadir}/icons/hicolor/16x16/apps/gvim.png
 install -p -m644 %{SOURCE8} \
@@ -254,6 +255,8 @@ install -p -m644 %{SOURCE9} \
 	%{buildroot}%{_datadir}/icons/hicolor/48x48/apps/gvim.png
 install -p -m644 %{SOURCE10} \
 	%{buildroot}%{_datadir}/icons/hicolor/64x64/apps/gvim.png
+install -p -m644 %{SOURCE11} \
+	%{buildroot}%{_datadir}/icons/hicolor/scalable/apps/gvim.svg
 
 %if %{with gui}
 # Register as an application to be visible in the software center
@@ -360,6 +363,7 @@ done
 %{_bindir}/vimdiff
 %{_bindir}/xxd
 %{_datadir}/applications/vim.desktop
+%{_datadir}/icons/*/*/*/*
 %{_datadir}/vim
 %exclude %{_datadir}/vim/%{vimdir}/tutor
 
@@ -373,7 +377,6 @@ done
 %{_bindir}/rgvim
 %{_datadir}/applications/gvim.desktop
 %{_datadir}/metainfo/gvim.appdata.xml
-%{_datadir}/icons/*/*/*/*
 
 %files tutor
 %{_bindir}/vimtutor

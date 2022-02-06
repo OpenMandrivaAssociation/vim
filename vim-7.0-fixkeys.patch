@@ -1,26 +1,26 @@
-diff -up vim-8.2.2300/src/term.c.fixkeys vim-8.2.2300/src/term.c
---- vim-8.2.2300/src/term.c.fixkeys	2021-01-04 20:44:28.049647125 +0100
-+++ vim-8.2.2300/src/term.c	2021-01-04 20:45:33.394364642 +0100
-@@ -919,14 +919,14 @@ static struct builtin_term builtin_termc
-     {K_XRIGHT,		IF_EB("\033[@;*C", ESC_STR "[@;*C")},
-     {K_XLEFT,		IF_EB("\033[@;*D", ESC_STR "[@;*D")},
+diff -up vim-8.2.4310/src/term.c.3~ vim-8.2.4310/src/term.c
+--- vim-8.2.4310/src/term.c.3~	2022-02-06 18:14:05.195194396 +0100
++++ vim-8.2.4310/src/term.c	2022-02-06 18:14:45.208366035 +0100
+@@ -921,14 +921,14 @@ static struct builtin_term builtin_termc
+     {K_XRIGHT,		"\033[@;*C"},
+     {K_XLEFT,		"\033[@;*D"},
      // An extra set of function keys for vt100 mode
--    {K_XF1,		IF_EB("\033O*P", ESC_STR "O*P")},
--    {K_XF2,		IF_EB("\033O*Q", ESC_STR "O*Q")},
--    {K_XF3,		IF_EB("\033O*R", ESC_STR "O*R")},
--    {K_XF4,		IF_EB("\033O*S", ESC_STR "O*S")},
--    {K_F1,		IF_EB("\033[11;*~", ESC_STR "[11;*~")},
--    {K_F2,		IF_EB("\033[12;*~", ESC_STR "[12;*~")},
--    {K_F3,		IF_EB("\033[13;*~", ESC_STR "[13;*~")},
--    {K_F4,		IF_EB("\033[14;*~", ESC_STR "[14;*~")},
-+    {K_XF1,             IF_EB("\033[11~", ESC_STR "[11~")},
-+    {K_XF2,             IF_EB("\033[12~", ESC_STR "[12~")},
-+    {K_XF3,             IF_EB("\033[13~", ESC_STR "[13~")},
-+    {K_XF4,             IF_EB("\033[14~", ESC_STR "[14~")},
-+    {K_F1,              IF_EB("\033OP", ESC_STR "OP")},
-+    {K_F2,              IF_EB("\033OQ", ESC_STR "OQ")},
-+    {K_F3,              IF_EB("\033OR", ESC_STR "OR")},
-+    {K_F4,              IF_EB("\033OS", ESC_STR "OS")},
-     {K_F5,		IF_EB("\033[15;*~", ESC_STR "[15;*~")},
-     {K_F6,		IF_EB("\033[17;*~", ESC_STR "[17;*~")},
-     {K_F7,		IF_EB("\033[18;*~", ESC_STR "[18;*~")},
+-    {K_XF1,		"\033O*P"},
+-    {K_XF2,		"\033O*Q"},
+-    {K_XF3,		"\033O*R"},
+-    {K_XF4,		"\033O*S"},
+-    {K_F1,		"\033[11;*~"},
+-    {K_F2,		"\033[12;*~"},
+-    {K_F3,		"\033[13;*~"},
+-    {K_F4,		"\033[14;*~"},
++    {K_XF1,             "\033[11~"},
++    {K_XF2,             "\033[12~"},
++    {K_XF3,             "\033[13~"},
++    {K_XF4,             "\033[14~"},
++    {K_F1,              "\033OP"},
++    {K_F2,              "\033OQ"},
++    {K_F3,              "\033OR"},
++    {K_F4,              "\033OS"},
+     {K_F5,		"\033[15;*~"},
+     {K_F6,		"\033[17;*~"},
+     {K_F7,		"\033[18;*~"},
