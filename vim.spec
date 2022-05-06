@@ -18,7 +18,7 @@
 Summary: The VIM editor
 URL: http://www.vim.org/
 Name: vim
-Version:	8.2.4428
+Version:	8.2.4877
 Release:	1
 License: Vim and MIT
 Source0: https://github.com/vim/vim/archive/v%{version}.tar.gz
@@ -215,7 +215,7 @@ export CXXFLAGS="%{optflags} -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -D_FORTIFY_SOU
 	--enable-gtk3-check --enable-gui=gtk3 \
 	--enable-xim
 
-%make_build VIMRCLOC=/etc VIMRUNTIMEDIR=/usr/share/vim/%{vimdir}
+%make_build VIMRCLOC=/etc VIMRUNTIMEDIR=/usr/share/vim/%{vimdir} EXTRA_LIBS=-lpython3.11
 # Unfortunately, out-of-tree builds aren't supported, so we have to do
 # install to an alternate DESTDIR instead of doing %%make_install twice
 # in the %%install section
@@ -238,7 +238,7 @@ cd -
 	%common_options \
 	--with-x=no --enable-gui=no
 
-%make_build VIMRCLOC=/etc VIMRUNTIMEDIR=/usr/share/vim/%{vimdir}
+%make_build VIMRCLOC=/etc VIMRUNTIMEDIR=/usr/share/vim/%{vimdir} EXTRA_LIBS=-lpython3.11
 
 %install
 %make_install BINDIR=%{_bindir} VIMRCLOC=/etc VIMRUNTIMEDIR=/usr/share/vim/%{vimdir} STRIP=/bin/true
