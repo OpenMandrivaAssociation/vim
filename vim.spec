@@ -5,8 +5,8 @@
 %bcond_without ruby
 %bcond_without lua
 
-%define baseversion 8.2
-%define vimdir vim82
+%define baseversion %(echo %{version} |cut -d. -f1-2)
+%define vimdir vim%(echo %{baseversion}|sed -e 's,\\.,,')
 
 %global __requires_exclude perl\\(getopts.pl\\)
 %global __requires_exclude_from %{_datadir}/vim
@@ -18,7 +18,7 @@
 Summary: The VIM editor
 URL: http://www.vim.org/
 Name: vim
-Version:	8.2.5154
+Version:	9.0.0002
 Release:	1
 License: Vim and MIT
 Source0: https://github.com/vim/vim/archive/v%{version}.tar.gz
@@ -303,12 +303,6 @@ EOF
 
 appstream-util validate-relax --nonet %{buildroot}/%{_datadir}/metainfo/*.appdata.xml
 %endif
-
-# Dependency cleanups
-chmod 644 %{buildroot}/%{_datadir}/%{name}/%{vimdir}/doc/vim2html.pl \
-	%{buildroot}/%{_datadir}/%{name}/%{vimdir}/tools/*.pl \
-	%{buildroot}/%{_datadir}/%{name}/%{vimdir}/tools/vim132
-chmod 644 runtime/doc/vim2html.pl
 
 mkdir -p %{buildroot}%{_sysconfdir}
 install -p -m644 %{SOURCE5} %{buildroot}%{_sysconfdir}/vimrc
