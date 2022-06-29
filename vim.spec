@@ -67,6 +67,7 @@ BuildRequires: pkgconfig(ncursesw)
 BuildRequires:  perl(ExtUtils::Embed) perl(ExtUtils::ParseXS)
 BuildRequires:  gpm-devel autoconf file
 BuildRequires: pkgconfig(libacl)
+BuildRequires: locales-extra-charsets
 %if %{with selinux}
 BuildRequires: selinux-devel
 %endif
