@@ -1,7 +1,7 @@
-diff -up vim-8.1.1471/src/xxd/xxd.c.xxdloc~ vim-8.1.1471/src/xxd/xxd.c
---- vim-8.1.1471/src/xxd/xxd.c.xxdloc~	2019-06-05 22:57:04.000000000 +0200
-+++ vim-8.1.1471/src/xxd/xxd.c	2019-06-06 01:10:11.403136154 +0200
-@@ -95,6 +95,7 @@
+diff -up vim-9.0.0049/src/xxd/xxd.c.2~ vim-9.0.0049/src/xxd/xxd.c
+--- vim-9.0.0049/src/xxd/xxd.c.2~	2022-07-09 21:27:07.000000000 +0200
++++ vim-9.0.0049/src/xxd/xxd.c	2022-07-10 05:16:38.676803818 +0200
+@@ -98,6 +98,7 @@
  #if __MWERKS__ && !defined(BEBOX)
  # include <unix.h>	/* for fdopen() on MAC */
  #endif
@@ -9,20 +9,20 @@ diff -up vim-8.1.1471/src/xxd/xxd.c.xxdloc~ vim-8.1.1471/src/xxd/xxd.c
  
  
  /*  This corrects the problem of missing prototypes for certain functions
-@@ -468,6 +469,12 @@ main(int argc, char *argv[])
-   char *pp;
+@@ -502,6 +503,12 @@ main(int argc, char *argv[])
+   char *varname = NULL;
    int addrlen = 9;
  
 +  char *lang=getenv("LANG");
 +  if(!lang) lang=getenv("LC_ALL");
 +  if(!lang) lang=getenv("LC_CTYPE");
 +  if(lang)
-+         setlocale(LC_ALL, lang);
++    setlocale(LC_ALL, lang);
 +
  #ifdef AMIGA
    /* This program doesn't work when started from the Workbench */
    if (argc == 0)
-@@ -854,7 +861,7 @@ main(int argc, char *argv[])
+@@ -868,7 +875,7 @@ main(int argc, char *argv[])
  #else
  	  (e > 31 && e < 127)
  #endif
