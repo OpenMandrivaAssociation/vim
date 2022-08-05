@@ -18,7 +18,7 @@
 Summary: The VIM editor
 URL: http://www.vim.org/
 Name: vim
-Version:	9.0.0049
+Version:	9.0.0148
 Release:	1
 License: Vim and MIT
 Source0: https://github.com/vim/vim/archive/v%{version}.tar.gz
@@ -91,6 +91,8 @@ Requires: vim-common = %{EVRD}
 Provides: %{_bindir}/mergetool
 Provides: %{_bindir}/vi
 Provides: %{_bindir}/vim
+
+Provides: texteditor
 
 %rename %{name}-common
 %rename %{name}-minimal
