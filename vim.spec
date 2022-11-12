@@ -18,7 +18,7 @@
 Summary: The VIM editor
 URL: http://www.vim.org/
 Name: vim
-Version:	9.0.0748
+Version:	9.0.0868
 Release:	1
 License: Vim and MIT
 Source0: https://github.com/vim/vim/archive/v%{version}.tar.gz
@@ -46,7 +46,7 @@ Patch1000: vim-8.2-qt-highlighting.patch
 # Don't replace "good" characters with .
 Patch1001: xxd-locale.patch
 
-Patch2002: vim-7.0-fixkeys.patch
+#Patch2002: vim-7.0-fixkeys.patch
 Patch2003: vim-7.4-specsyntax.patch
 
 Patch3002: vim-7.4-nowarnings.patch
