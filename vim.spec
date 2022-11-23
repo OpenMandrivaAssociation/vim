@@ -18,7 +18,7 @@
 Summary: The VIM editor
 URL: http://www.vim.org/
 Name: vim
-Version:	9.0.0915
+Version:	9.0.0929
 Release:	1
 License: Vim and MIT
 Source0: https://github.com/vim/vim/archive/v%{version}.tar.gz
