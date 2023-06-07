@@ -45,6 +45,8 @@ Source24: nagios.vim
 Patch1000: vim-8.2-qt-highlighting.patch
 # Don't replace "good" characters with .
 Patch1001: xxd-locale.patch
+# Don't detect paths for HOST perl
+Patch1002: vim-crosscompile-find-perl.patch
 
 #Patch2002: vim-7.0-fixkeys.patch
 Patch2003: vim-7.4-specsyntax.patch
@@ -191,6 +193,16 @@ autoconf
 %build
 export CFLAGS="%{optflags} -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -D_FORTIFY_SOURCE=2"
 export CXXFLAGS="%{optflags} -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -D_FORTIFY_SOURCE=2"
+
+%if %{cross_compiling}
+export vim_cv_toupper_broken=no
+export vim_cv_terminfo=yes
+export vim_cv_tgetent=zero
+export vim_cv_getcwd_broken=no
+export vim_cv_timer_create=yes
+export vim_cv_stat_ignores_slash=yes
+export vim_cv_memmove_handles_overlap=yes
+%endif
 
 %define common_options \\\
 	--with-features=huge \\\
