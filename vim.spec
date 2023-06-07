@@ -18,7 +18,7 @@
 Summary: The VIM editor
 URL: http://www.vim.org/
 Name: vim
-Version:	9.0.1539
+Version:	9.0.1614
 Release:	1
 License: Vim and MIT
 Source0: https://github.com/vim/vim/archive/v%{version}.tar.gz
@@ -151,14 +151,6 @@ application with a full GUI interface and mouse support by command gvim.
 Install the vim-X11 package if you'd like to try out a version of vi
 with graphics and mouse capabilities.  You'll also need to install the
 vim-common package.
-%endif
-
-%package tutor
-Summary:	Tutor teaching the use of the VIM editor
-Requires:	%{name} = %{EVRD}
-
-%description tutor
-Tutor teaching the use of the VIM editor
 
 %package X11-tutor
 Summary:	Tutor teaching the use of the gVIM editor
@@ -167,6 +159,14 @@ Requires:	%{name}-tutor = %{EVRD}
 
 %description X11-tutor
 Tutor teaching the use of the gVIM editor
+%endif
+
+%package tutor
+Summary:	Tutor teaching the use of the VIM editor
+Requires:	%{name} = %{EVRD}
+
+%description tutor
+Tutor teaching the use of the VIM editor
 
 %prep
 %autosetup -p1
@@ -347,6 +347,13 @@ for l in *; do
 	done
 done
 
+%if %{without gui}
+# Those are always built, but only needed for GUI
+rm -f %{buildroot}%{_mandir}/*/evim.1* \
+	%{buildroot}%{_mandir}/*/*/evim.1* \
+	%{buildroot}%{_datadir}/applications/gvim.desktop
+%endif
+
 %files -f vim.mans
 %config(noreplace) %{_sysconfdir}/vimrc
 %{_bindir}/ex
@@ -362,6 +369,11 @@ done
 %{_datadir}/vim
 %exclude %{_datadir}/vim/%{vimdir}/tutor
 
+%files tutor
+%{_bindir}/vimtutor
+%{_datadir}/vim/%{vimdir}/tutor
+
+%if %{with gui}
 %files X11 -f gvim.mans
 %{_bindir}/eview
 %{_bindir}/evim
@@ -373,9 +385,6 @@ done
 %{_datadir}/applications/gvim.desktop
 %{_datadir}/metainfo/gvim.appdata.xml
 
-%files tutor
-%{_bindir}/vimtutor
-%{_datadir}/vim/%{vimdir}/tutor
-
 %files X11-tutor
 %{_bindir}/gvimtutor
+%endif
