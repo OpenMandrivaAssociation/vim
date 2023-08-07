@@ -229,6 +229,9 @@ export vim_cv_memmove_handles_overlap=yes
 %if %{with gui}
 %configure \
 	%common_options \
+%if %{cross_compiling}
+	--with-python3-config-dir=$(ls -1d /usr/%{_target_platform}%{_libdir}/python*/config-*/ |head -n1) \\\
+%endif
 	--with-x=yes \
 	--enable-gtk3-check --enable-gui=gtk3 \
 	--enable-xim
@@ -254,6 +257,9 @@ cd -
 
 %configure \
 	%common_options \
+%if %{cross_compiling}
+	--with-python3-config-dir=$(ls -1d /usr/%{_target_platform}%{_libdir}/python*/config-*/ |head -n1) \\\
+%endif
 	--with-x=no --enable-gui=no
 
 %make_build VIMRCLOC=/etc VIMRUNTIMEDIR=/usr/share/vim/%{vimdir} EXTRA_LIBS=-lpython3.11
