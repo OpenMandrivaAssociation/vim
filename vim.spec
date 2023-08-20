@@ -21,7 +21,7 @@
 Summary: The VIM editor
 URL: http://www.vim.org/
 Name: vim
-Version:	9.0.1677
+Version:	9.0.1757
 Release:	1
 License: Vim and MIT
 Source0: https://github.com/vim/vim/archive/v%{version}.tar.gz
@@ -52,6 +52,7 @@ Patch1001: xxd-locale.patch
 Patch1002: vim-crosscompile-find-perl.patch
 # Fix build with perl 5.38
 Patch1003: https://github.com/vim/vim/pull/12575.patch
+Patch1004: vim-9.0.1757-perl-5.38-compile.patch
 
 #Patch2002: vim-7.0-fixkeys.patch
 Patch2003: vim-7.4-specsyntax.patch
@@ -167,6 +168,12 @@ Requires:	%{name}-tutor = %{EVRD}
 %description X11-tutor
 Tutor teaching the use of the gVIM editor
 %endif
+
+%package -n xxd
+Summary:	Command line hexdump tool
+
+%description -n xxd
+Command line hexdump tool
 
 %package tutor
 Summary:	Tutor teaching the use of the VIM editor
@@ -348,11 +355,10 @@ done
 mkdir -p %{buildroot}/%{_mandir}/man5
 echo ".so man1/vim.1" > %{buildroot}/%{_mandir}/man5/vimrc.5
 
-ln -s vim %{buildroot}%{_bindir}/vi
-
 BUILDDIR="$(pwd)"
 cd %{buildroot}%{_mandir}
 for i in man1/* man5/*; do
+	basename $i |grep -q xxd && continue
 	if basename $i |cut -d. -f1 |grep -qE '(g|ev)'; then
 		echo "%{_mandir}/${i}*" >>$BUILDDIR/gvim.mans
 	else
@@ -382,15 +388,17 @@ rm -f %{buildroot}%{_mandir}/*/evim.1* \
 %{_bindir}/ex
 %{_bindir}/rview
 %{_bindir}/rvim
-%{_bindir}/vi
 %{_bindir}/view
 %{_bindir}/vim
 %{_bindir}/vimdiff
-%{_bindir}/xxd
 %{_datadir}/applications/vim.desktop
 %{_datadir}/icons/*/*/*/*
 %{_datadir}/vim
 %exclude %{_datadir}/vim/%{vimdir}/tutor
+
+%files -n xxd
+%{_bindir}/xxd
+%{_mandir}/man1/xxd.1*
 
 %files tutor
 %{_bindir}/vimtutor
