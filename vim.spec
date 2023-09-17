@@ -21,7 +21,7 @@
 Summary: The VIM editor
 URL: http://www.vim.org/
 Name: vim
-Version:	9.0.1757
+Version:	9.0.1833
 Release:	1
 License: Vim and MIT
 Source0: https://github.com/vim/vim/archive/v%{version}.tar.gz
@@ -51,8 +51,8 @@ Patch1001: xxd-locale.patch
 # Don't detect paths for HOST perl
 Patch1002: vim-crosscompile-find-perl.patch
 # Fix build with perl 5.38
-Patch1003: https://github.com/vim/vim/pull/12575.patch
-Patch1004: vim-9.0.1757-perl-5.38-compile.patch
+#Patch1003: https://github.com/vim/vim/pull/12575.patch
+#Patch1004: vim-9.0.1757-perl-5.38-compile.patch
 
 #Patch2002: vim-7.0-fixkeys.patch
 Patch2003: vim-7.4-specsyntax.patch

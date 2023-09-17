@@ -1,7 +1,7 @@
-diff -up vim-9.0.0049/src/xxd/xxd.c.2~ vim-9.0.0049/src/xxd/xxd.c
---- vim-9.0.0049/src/xxd/xxd.c.2~	2022-07-09 21:27:07.000000000 +0200
-+++ vim-9.0.0049/src/xxd/xxd.c	2022-07-10 05:16:38.676803818 +0200
-@@ -98,6 +98,7 @@
+diff -up vim-9.0.1833/src/xxd/xxd.c.2~ vim-9.0.1833/src/xxd/xxd.c
+--- vim-9.0.1833/src/xxd/xxd.c.2~	2023-08-31 23:52:30.000000000 +0200
++++ vim-9.0.1833/src/xxd/xxd.c	2023-09-17 06:40:32.823417179 +0200
+@@ -99,6 +99,7 @@
  #if __MWERKS__ && !defined(BEBOX)
  # include <unix.h>	/* for fdopen() on MAC */
  #endif
@@ -9,9 +9,9 @@ diff -up vim-9.0.0049/src/xxd/xxd.c.2~ vim-9.0.0049/src/xxd/xxd.c
  
  
  /*  This corrects the problem of missing prototypes for certain functions
-@@ -502,6 +503,12 @@ main(int argc, char *argv[])
-   char *varname = NULL;
+@@ -565,6 +566,12 @@ main(int argc, char *argv[])
    int addrlen = 9;
+   int color = 0;
  
 +  char *lang=getenv("LANG");
 +  if(!lang) lang=getenv("LC_ALL");
@@ -19,15 +19,15 @@ diff -up vim-9.0.0049/src/xxd/xxd.c.2~ vim-9.0.0049/src/xxd/xxd.c
 +  if(lang)
 +    setlocale(LC_ALL, lang);
 +
- #ifdef AMIGA
-   /* This program doesn't work when started from the Workbench */
-   if (argc == 0)
-@@ -868,7 +875,7 @@ main(int argc, char *argv[])
- #else
- 	  (e > 31 && e < 127)
+ #ifdef UNIX
+   color = isatty(STDOUT_FILENO);
  #endif
--	  ? e : '.';
-+	  ? e : isalnum(e) ? e : '.';
-       n++;
-       if (++p == cols)
- 	{
+@@ -1000,7 +1007,7 @@ main(int argc, char *argv[])
+ #else
+               (e > 31 && e < 127)
+ #endif
+-              ? e : '.';
++              ? e : isalnum(e) ? e : '.';
+           n++;
+           if (++p == cols)
+             {
