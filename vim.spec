@@ -19,7 +19,7 @@
 %bcond_without python3
 
 Summary: The VIM editor
-URL: http://www.vim.org/
+URL: https://www.vim.org/
 Name: vim
 Version:	9.1.0059
 Release:	1
