@@ -1,7 +1,7 @@
-diff -up vim-9.0.2073/src/xxd/xxd.c.2~ vim-9.0.2073/src/xxd/xxd.c
---- vim-9.0.2073/src/xxd/xxd.c.2~	2023-10-26 23:15:44.000000000 +0200
-+++ vim-9.0.2073/src/xxd/xxd.c	2023-10-27 10:20:18.279143345 +0200
-@@ -102,6 +102,7 @@
+diff -up vim-9.1.0888/src/xxd/xxd.c.2~ vim-9.1.0888/src/xxd/xxd.c
+--- vim-9.1.0888/src/xxd/xxd.c.2~	2024-11-25 19:39:04.000000000 +0100
++++ vim-9.1.0888/src/xxd/xxd.c	2024-11-26 14:38:10.223737147 +0100
+@@ -110,6 +110,7 @@
  #if __MWERKS__ && !defined(BEBOX)
  # include <unix.h>	/* for fdopen() on MAC */
  #endif
@@ -9,7 +9,7 @@ diff -up vim-9.0.2073/src/xxd/xxd.c.2~ vim-9.0.2073/src/xxd/xxd.c
  
  
  /*  This corrects the problem of missing prototypes for certain functions
-@@ -651,6 +652,12 @@ main(int argc, char *argv[])
+@@ -672,6 +673,12 @@ main(int argc, char *argv[])
    if (no_color == NULL || no_color[0] == '\0')
      color = enable_color();
  
@@ -22,12 +22,12 @@ diff -up vim-9.0.2073/src/xxd/xxd.c.2~ vim-9.0.2073/src/xxd/xxd.c
  #ifdef AMIGA
    /* This program doesn't work when started from the Workbench */
    if (argc == 0)
-@@ -1099,7 +1106,7 @@ main(int argc, char *argv[])
+@@ -1141,7 +1148,7 @@ main(int argc, char *argv[])
  #else
                (e > 31 && e < 127)
  #endif
 -              ? e : '.';
 +              ? e : isalnum(e) ? e : '.';
-           n++;
-           if (++p == cols)
-             {
+         }
+         n++;
+         if (++p == cols)

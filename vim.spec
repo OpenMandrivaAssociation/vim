@@ -21,7 +21,7 @@
 Summary: The VIM editor
 URL: https://www.vim.org/
 Name: vim
-Version:	9.1.0059
+Version:	9.1.0888
 Release:	1
 License: Vim and MIT
 Source0: https://github.com/vim/vim/archive/v%{version}.tar.gz
@@ -58,7 +58,6 @@ Patch3002: vim-7.4-nowarnings.patch
 Patch3004: vim-7.0-rclocation.patch
 Patch3008: vim-7.4-syncolor.patch
 Patch3010: vim-7.3-manpage-typo-668894-675480.patch
-Patch3011: vim-manpagefixes-948566.patch
 Patch3016: vim-8.0-copy-paste.patch
 # fips warning
 Patch3018: vim-crypto-warning.patch
