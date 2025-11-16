@@ -1,7 +1,7 @@
-diff -up vim-9.1.0888/runtime/syntax/spec.vim.4~ vim-9.1.0888/runtime/syntax/spec.vim
---- vim-9.1.0888/runtime/syntax/spec.vim.4~	2024-11-25 19:39:04.000000000 +0100
-+++ vim-9.1.0888/runtime/syntax/spec.vim	2024-11-26 14:44:44.938733697 +0100
-@@ -36,7 +36,7 @@ syn match specNoNumberHilite 'X11\|X11R6
+diff -up vim-9.1.1917/runtime/syntax/spec.vim.4~ vim-9.1.1917/runtime/syntax/spec.vim
+--- vim-9.1.1917/runtime/syntax/spec.vim.4~	2025-11-15 18:41:28.000000000 +0100
++++ vim-9.1.1917/runtime/syntax/spec.vim	2025-11-16 18:10:52.114188006 +0100
+@@ -38,7 +38,7 @@ syn match specNoNumberHilite 'X11\|X11R6
  syn match specManpageFile '[a-zA-Z]\.1'
  
  "Day, Month and most used license acronyms
@@ -10,24 +10,21 @@ diff -up vim-9.1.0888/runtime/syntax/spec.vim.4~ vim-9.1.0888/runtime/syntax/spe
  syn keyword specWeekday contained Mon Tue Wed Thu Fri Sat Sun
  syn keyword specMonth   contained Jan Feb Mar Apr Jun Jul Aug Sep Oct Nov Dec
  syn keyword specMonth   contained January February March April May June July August September October November December
-@@ -59,9 +59,9 @@ syn cluster specListedFiles contains=spe
- 
- "specCommands
+@@ -63,7 +63,7 @@ syn cluster specListedFiles contains=spe
  syn match   specConfigure  contained '\./configure'
--syn match   specTarCommand contained '\<tar\s\+[cxvpzIf]\{,5}\s*'
-+syn match   specTarCommand contained '\<tar\s\+[cxvpzIjf]\{,5}\s*'
+ syn match   specTarCommand contained '\<tar\s\+[cxvpzIjf]\{,5}\s*'
  syn keyword specCommandSpecial contained root
--syn keyword specCommand		contained make xmkmf mkdir chmod ln find sed rm strip moc echo grep ls rm mv mkdir install cp pwd cat tail then else elif cd gzip rmdir ln eval export touch
+-syn keyword specCommand		contained make xmkmf mkdir chmod ln find sed rm strip moc echo grep ls rm mv mkdir install cp pwd cat tail then else elif cd gzip rmdir ln eval export touch bzip2 bunzip2 gunzip
 +syn keyword specCommand		contained make xmkmf mkdir chmod ln find sed rm strip moc echo grep ls rm mv mkdir install cp pwd cat tail then else elif cd gzip rmdir ln eval export touch bzip2 bunzip2 gunzip xz unxz zstd
  syn cluster specCommands contains=specCommand,specTarCommand,specConfigure,specCommandSpecial
  
  "frequently used rpm env vars
-@@ -103,7 +103,7 @@ syn case ignore
+@@ -105,7 +105,7 @@ syn case ignore
  "%% PreAmble Section %%
  "Copyright and Serial were deprecated by License and Epoch
  syn region specPreAmbleDeprecated oneline matchgroup=specError start='^\(Copyright\|Serial\)' end='$' contains=specEmail,specURL,specURLMacro,specLicense,specColon,specVariables,specSpecialChar,specMacroIdentifier
--syn region specPreAmble oneline matchgroup=specCommand start='^\(Prereq\|Summary\|Name\|Version\|Packager\|Requires\|Recommends\|Suggests\|Supplements\|Enhances\|Icon\|URL\|SourceLicense\|Source\d*\|Patch\d*\|Prefix\|Packager\|Group\|License\|Release\|BuildRoot\|Distribution\|Vendor\|Provides\|ExclusiveArch\|ExcludeArch\|ExclusiveOS\|Obsoletes\|BuildArch\|BuildArchitectures\|BuildRequires\|BuildConflicts\|BuildPreReq\|Conflicts\|AutoRequires\|AutoReq\|AutoReqProv\|AutoProv\|Epoch\)' end='$' contains=specEmail,specURL,specURLMacro,specLicense,specColon,specVariables,specSpecialChar,specMacroIdentifier
-+syn region specPreAmble oneline matchgroup=specCommand start='^\(Prereq\|Summary\|Name\|Version\|Packager\|Requires\|Recommends\|Suggests\|Supplements\|Enhances\|Icon\|URL\|SourceLicense\|Source\d*\|Patch\d*\|Prefix\|Packager\|Group\|License\|Release\|BuildRoot\|Distribution\|Vendor\|Provides\|ExclusiveArch\|ExcludeArch\|ExcludeOS\|ExclusiveOS\|Obsoletes\|BuildArch\|BuildArchitectures\|BuildRequires\|BuildConflicts\|BuildPreReq\|Conflicts\|AutoRequires\|AutoReq\|AutoReqProv\|AutoProv\|Epoch\)' end='$' contains=specEmail,specURL,specURLMacro,specLicense,specColon,specVariables,specSpecialChar,specMacroIdentifier
+-syn region specPreAmble oneline matchgroup=specCommand start='^\(Prereq\|Summary\|Name\|Version\|Packager\|Requires\|Recommends\|Suggests\|Supplements\|Enhances\|Icon\|URL\|SourceLicense\|Source\d*\|Patch\d*\|Prefix\|Packager\|Group\|License\|Release\|BuildRoot\|Distribution\|DistTag\|Vendor\|Provides\|ExclusiveArch\|ExcludeArch\|ExclusiveOS\|Obsoletes\|BuildArch\|BuildArchitectures\|BuildRequires\|BuildConflicts\|BuildPreReq\|Conflicts\|AutoRequires\|AutoReq\|AutoReqProv\|AutoProv\|Epoch\|ModularityLabel\)' end='$' contains=specEmail,specURL,specURLMacro,specLicense,specColon,specVariables,specSpecialChar,specMacroIdentifier
++syn region specPreAmble oneline matchgroup=specCommand start='^\(Prereq\|Summary\|Name\|Version\|Packager\|Requires\|Recommends\|Suggests\|Supplements\|Enhances\|Icon\|URL\|SourceLicense\|Source\d*\|Patch\d*\|Prefix\|Packager\|Group\|License\|Release\|BuildRoot\|Distribution\|DistTag\|Vendor\|Provides\|ExclusiveArch\|ExcludeArch\|ExcludeOS\|ExclusiveOS\|Obsoletes\|BuildArch\|BuildArchitectures\|BuildRequires\|BuildConflicts\|BuildPreReq\|Conflicts\|AutoRequires\|AutoReq\|AutoReqProv\|AutoProv\|Epoch\|ModularityLabel\)' end='$' contains=specEmail,specURL,specURLMacro,specLicense,specColon,specVariables,specSpecialChar,specMacroIdentifier
  
  "%% Description Section %%
  syn region specDescriptionArea matchgroup=specSection start='^%description' end='^%'me=e-1 contains=specDescriptionOpts,specEmail,specURL,specNumber,specMacroIdentifier,specComment
