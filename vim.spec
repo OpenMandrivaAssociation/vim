@@ -63,6 +63,10 @@ Patch3016: vim-8.0-copy-paste.patch
 Patch3018: vim-crypto-warning.patch
 
 %if %{with python3}
+BuildRequires:	automake
+BuildRequires:	libtool-base
+BuildRequires:	slibtool
+BuildRequires:	make
 BuildRequires: pkgconfig(python3)
 %endif
 BuildRequires: perl-devel
