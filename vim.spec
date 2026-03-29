@@ -21,7 +21,7 @@
 Summary: The VIM editor
 URL: https://www.vim.org/
 Name: vim
-Version:	9.1.1917
+Version:	9.2.0271
 Release:	1
 License: Vim and MIT
 Source0: https://github.com/vim/vim/archive/v%{version}.tar.gz
@@ -243,7 +243,7 @@ export vim_cv_memmove_handles_overlap=yes
 	--enable-gtk3-check --enable-gui=gtk3 \
 	--enable-xim
 
-%make_build VIMRCLOC=/etc VIMRUNTIMEDIR=/usr/share/vim/%{vimdir} EXTRA_LIBS=-lpython3.11
+%make_build VIMRCLOC=/etc VIMRUNTIMEDIR=/usr/share/vim/%{vimdir} EXTRA_LIBS=-lpython%{pyver}
 # Unfortunately, out-of-tree builds aren't supported, so we have to do
 # install to an alternate DESTDIR instead of doing %%make_install twice
 # in the %%install section
@@ -269,7 +269,7 @@ cd -
 %endif
 	--with-x=no --enable-gui=no
 
-%make_build VIMRCLOC=/etc VIMRUNTIMEDIR=/usr/share/vim/%{vimdir} EXTRA_LIBS=-lpython3.11
+%make_build VIMRCLOC=/etc VIMRUNTIMEDIR=/usr/share/vim/%{vimdir} EXTRA_LIBS=-lpython%{pyver}
 
 %install
 %make_install BINDIR=%{_bindir} VIMRCLOC=/etc VIMRUNTIMEDIR=/usr/share/vim/%{vimdir} STRIP=/bin/true
