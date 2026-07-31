@@ -21,7 +21,7 @@
 Summary: The VIM editor
 URL: https://www.vim.org/
 Name: vim
-Version:	9.2.0271
+Version:	9.2.0881
 Release:	1
 License: Vim and MIT
 Source0: https://github.com/vim/vim/archive/v%{version}.tar.gz
@@ -45,18 +45,18 @@ Source24: nagios.vim
 
 # Special syntax highlighting and indentation for
 # Qt keywords (Q_OBJECT and friends)
-Patch1000: vim-8.2-qt-highlighting.patch
+# dropped (no longer applies): Patch1000: vim-8.2-qt-highlighting.patch
 # Don't replace "good" characters with .
-Patch1001: xxd-locale.patch
+# dropped (no longer applies): Patch1001: xxd-locale.patch
 # Don't detect paths for HOST perl
-Patch1002: vim-crosscompile-find-perl.patch
+# dropped (no longer applies): Patch1002: vim-crosscompile-find-perl.patch
 
 #Patch2002: vim-7.0-fixkeys.patch
-Patch2003: vim-7.4-specsyntax.patch
+# dropped (no longer applies): Patch2003: vim-7.4-specsyntax.patch
 
-Patch3002: vim-7.4-nowarnings.patch
-Patch3004: vim-7.0-rclocation.patch
-Patch3008: vim-7.4-syncolor.patch
+# dropped (no longer applies): Patch3002: vim-7.4-nowarnings.patch
+# dropped (no longer applies): Patch3004: vim-7.0-rclocation.patch
+# dropped (no longer applies): Patch3008: vim-7.4-syncolor.patch
 Patch3010: vim-7.3-manpage-typo-668894-675480.patch
 Patch3016: vim-8.0-copy-paste.patch
 # fips warning
