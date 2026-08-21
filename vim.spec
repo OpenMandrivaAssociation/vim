@@ -22,7 +22,7 @@ Summary: The VIM editor
 URL: https://www.vim.org/
 Name: vim
 Version:	9.2.0920
-Release:	1
+Release:	2
 License: Vim and MIT
 Source0: https://github.com/vim/vim/archive/v%{version}.tar.gz
 Source5: vimrc
@@ -237,6 +237,7 @@ export vim_cv_memmove_handles_overlap=yes
 	%common_options \
 %if %{cross_compiling}
 	--with-python3-config-dir=$(ls -1d /usr/%{_target_platform}%{_libdir}/python*/config-*/ |head -n1) \\\
+	--disable-gpm \\\
 %endif
 	--with-x=yes \
 	--enable-gtk3-check --enable-gui=gtk3 \
@@ -265,6 +266,7 @@ cd -
 	%common_options \
 %if %{cross_compiling}
 	--with-python3-config-dir=$(ls -1d /usr/%{_target_platform}%{_libdir}/python*/config-*/ |head -n1) \\\
+	--disable-gpm \\\
 %endif
 	--with-x=no --enable-gui=no
 
@@ -272,9 +274,11 @@ cd -
 
 %install
 %make_install BINDIR=%{_bindir} VIMRCLOC=/etc VIMRUNTIMEDIR=/usr/share/vim/%{vimdir} STRIP=/bin/true
+%if %{with gui}
 find binaries-gui |while read r; do
 	[ -e %{buildroot}${r:12} ] || cp -a $r %{buildroot}${r:12}
 done
+%endif
 
 mkdir -p %{buildroot}%{_datadir}/icons/hicolor/{16x16,32x32,48x48,64x64,scalable}/apps
 install -p -m644 %{SOURCE7} \
