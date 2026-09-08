@@ -21,8 +21,8 @@
 Summary: The VIM editor
 URL: https://www.vim.org/
 Name: vim
-Version:	9.2.0920
-Release:	2
+Version:	9.2.1046
+Release:	1
 License: Vim and MIT
 Source0: https://github.com/vim/vim/archive/v%{version}.tar.gz
 Source5: vimrc
@@ -271,6 +271,30 @@ cd -
 	--with-x=no --enable-gui=no
 
 %make_build VIMRCLOC=/etc VIMRUNTIMEDIR=/usr/share/vim/%{vimdir} EXTRA_LIBS=-lpython%{pyver}
+
+# Regex, syntax highlighting and ex-command execution are the hot, branchy
+# paths; a short non-interactive edit of C sources is a decent profile.
+%pgo
+vim=./src/vim
+[ -x "$vim" ] || { echo "PGO: instrumented vim missing"; exit 1; }
+train=$(mktemp -d)
+trap 'rm -rf "$train"' EXIT
+cp src/*.c "$train/" 2>/dev/null || true
+n=0
+for f in "$train"/*.c; do
+	[ -f "$f" ] || continue
+	n=$((n + 1))
+	[ "$n" -gt 12 ] && break
+	"$vim" -u NONE -N --not-a-term -n \
+		-c 'syntax on' -c 'set ft=c' \
+		-c 'normal gg' -c '/int' -c 'normal nnn' \
+		-c '%s/static/static/ge' \
+		-c 'undo' \
+		-c 'wq!' "$f" >/dev/null 2>&1 || true
+done
+if [ -x ./src/xxd/xxd ]; then
+	./src/xxd/xxd "$train"/main.c >/dev/null 2>&1 || true
+fi
 
 %install
 %make_install BINDIR=%{_bindir} VIMRCLOC=/etc VIMRUNTIMEDIR=/usr/share/vim/%{vimdir} STRIP=/bin/true
