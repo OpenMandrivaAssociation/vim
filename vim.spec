@@ -21,9 +21,10 @@
 Summary: The VIM editor
 URL: https://www.vim.org/
 Name: vim
-Version:	9.2.1209
+Version:	9.2.1237
 Release:	1
 License: Vim and MIT
+Group:		Applications/Editors
 Source0: https://github.com/vim/vim/archive/v%{version}.tar.gz
 Source5: vimrc
 Source7: gvim16.png
@@ -112,6 +113,7 @@ multiple windows, multi-level undo, block highlighting and more.
 
 %package spell
 Summary: The dictionaries for spell checking. This package is optional
+Group:		Applications/Editors
 Requires: vim-common = %{EVRD}
 
 %description spell
@@ -121,6 +123,7 @@ many different languages.
 %if %{with gui}
 %package X11
 Summary: The VIM version of the vi editor for the X Window System - GVim
+Group:		Applications/Editors
 # needed in configure script to have correct macros enabled for GUI (#1603272)
 BuildRequires: pkgconfig(gtk+-3.0)
 BuildRequires: pkgconfig(xt)
@@ -161,6 +164,7 @@ vim-common package.
 
 %package X11-tutor
 Summary:	Tutor teaching the use of the gVIM editor
+Group:		Applications/Editors
 Requires:	%{name}-X11 = %{EVRD}
 Requires:	%{name}-tutor = %{EVRD}
 
@@ -170,12 +174,14 @@ Tutor teaching the use of the gVIM editor
 
 %package -n xxd
 Summary:	Command line hexdump tool
+Group:		Development/Tools
 
 %description -n xxd
 Command line hexdump tool
 
 %package tutor
 Summary:	Tutor teaching the use of the VIM editor
+Group:		Applications/Editors
 Requires:	%{name} = %{EVRD}
 
 %description tutor
