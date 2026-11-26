@@ -21,7 +21,7 @@
 Summary: The VIM editor
 URL: https://www.vim.org/
 Name: vim
-Version:	9.2.1409
+Version:	9.2.1417
 Release:	1
 License: Vim and MIT
 Group:		Applications/Editors
